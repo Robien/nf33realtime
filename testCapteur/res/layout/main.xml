@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/titre"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/titre" />
+    
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
+    <Button
+      android:id="@+id/bouton"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="bottom"
+	  android:text="@string/boutonStart" />
+    
+     <TextView
+        android:id="@+id/infocapteurs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+         />
+
+</LinearLayout>
