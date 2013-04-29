@@ -40,7 +40,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 	private long delais = 0;
 
 
-	private BufferedWriter writer;
+	private Fichier fichier;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -90,6 +90,9 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 			Log.e("DADU", "Aucun accelerometre");
 			b.setEnabled(false);
 		}
+		
+		fichier = new Fichier();
+		
 		Log.d("DADU", "onCreat end");
 	}
 
@@ -134,7 +137,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 	private void start()
 	{
 		Log.d("DADU", "start : demande de capteur");
-		openFile();
+		fichier.openFile();
 		sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 		isStarted = true;
 	}
@@ -144,7 +147,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		Log.d("DADU", "stop : " + isStarted.toString());
 		sensorManager.unregisterListener(this, accelerometer);
 		isStarted = false;
-		close();
+		fichier.close();
 	}
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy)
@@ -162,61 +165,9 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		String chaine = new String("delais : " + delais + "ns");
 		TextView vue = (TextView) findViewById(R.id.info);
 		vue.setText(chaine);
-		write(chaine);
+		fichier.write(chaine);
 	}
 
-	public void openFile()
-	{
-		try
-		{
 
-			
-			
-			//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			
-			File newfile = new File(Environment.getExternalStorageDirectory().getPath()  + File.separator
-					+ "data-" + Calendar.getInstance().getTime().toGMTString().replace(' ', '-').replace(':', '-') + ".txt");
-
-			newfile.createNewFile();
-
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newfile)));
-
-		}
-		catch (Exception e)
-		{
-//			Toast.makeText(getApplicationContext(), "fichier pas ouvert : " + Environment.getExternalStorageDirectory().getPath(), Toast.LENGTH_SHORT)
-//					.show();
-			Toast.makeText(getApplicationContext(),e.getMessage() , Toast.LENGTH_SHORT)
-			.show();
-		}
-
-	}
-
-	public void write(String data)
-	{
-
-		try
-		{
-			writer.write(data);
-		}
-		catch (IOException e)
-		{
-			Toast.makeText(getApplicationContext(), "data " + data + "pas enregistré", Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	public void close()
-	{
-
-		try
-		{
-			writer.flush();
-			writer.close();
-		}
-		catch (IOException e)
-		{
-			Toast.makeText(getApplicationContext(), "erreur à la fermeture", Toast.LENGTH_SHORT).show();
-		}
-	}
 
 }
