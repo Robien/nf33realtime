@@ -87,6 +87,8 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		
 		
 		Log.d("DADU", "onCreat end");
+		
+
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
 	public void onClick(View v)
 	{
-	
+		//capteurManager.testAuto();
 		if (isStarted == false)
 		{
 			capteurManager.setIdCapteurCourant(0);

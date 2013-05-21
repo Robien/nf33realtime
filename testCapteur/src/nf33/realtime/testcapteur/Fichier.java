@@ -116,7 +116,12 @@ public class Fichier
 		
 		try
 		{
-			return reader.readLine();
+			String r = reader.readLine(); 
+			if (r == null)
+			{
+				return "";
+			}
+			return r;
 		}
 		catch (IOException e)
 		{

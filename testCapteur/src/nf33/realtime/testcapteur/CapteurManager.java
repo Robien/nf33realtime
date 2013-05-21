@@ -10,7 +10,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 import android.util.Log;
+import android.widget.SlidingDrawer;
 
 
 /**
@@ -181,5 +183,26 @@ public class CapteurManager implements SensorEventListener
 		Log.d("DADU", "stop");
 		sensorManager.unregisterListener(this, capteurCourant);
 		//fichier.close();
+	}
+	
+	public void testAuto()
+	{
+		setIdCapteurCourant(0);
+		for (int i = 10;;i = i * 2)
+		{
+			while (nextCapteur())
+			{
+				activity.newMax(delaisCapteursMax.get(idCapteurCourant));
+				 try
+				{
+					Thread.sleep(i);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
