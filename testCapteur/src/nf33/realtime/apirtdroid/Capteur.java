@@ -13,9 +13,9 @@ public class Capteur
 	private int id;
 	
 	
-	public Capteur()
+	public Capteur(int id)
 	{
-		
+		setId(id);
 	
 	}
 	
