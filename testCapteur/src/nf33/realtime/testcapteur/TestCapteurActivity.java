@@ -1,6 +1,7 @@
 package nf33.realtime.testcapteur;
 
 
+import nf33.realtime.apirtdroid.CapteurManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;

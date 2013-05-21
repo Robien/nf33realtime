@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nf33.realtime.testcapteur;
+package nf33.realtime.apirtdroid;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

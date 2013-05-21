@@ -1,10 +1,12 @@
 /**
  * 
  */
-package nf33.realtime.testcapteur;
+package nf33.realtime.apirtdroid;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import nf33.realtime.testcapteur.TestCapteurActivity;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -35,7 +37,7 @@ public class CapteurManager implements SensorEventListener
 	
 	private Fichier fichier;
 	
-	CapteurManager(TestCapteurActivity activity)
+	public CapteurManager(TestCapteurActivity activity)
 	{
 		this.activity = activity;
 		
