@@ -3,16 +3,14 @@
  */
 package nf33.realtime.testcapteur;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.SlidingDrawer;
 
 
 /**
@@ -193,15 +191,22 @@ public class CapteurManager implements SensorEventListener
 			while (nextCapteur())
 			{
 				activity.newMax(delaisCapteursMax.get(idCapteurCourant));
-				 try
+				
+				for (int j = 0; j  < 1000000; ++j)
 				{
-					Thread.sleep(i);
+					
 				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+				
+//				 try
+//				{
+//					Thread.sleep(i);
+//				}
+//				catch (InterruptedException e)
+//				{
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 		}
 	}

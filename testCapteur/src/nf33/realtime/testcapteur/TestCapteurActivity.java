@@ -1,42 +1,21 @@
 package nf33.realtime.testcapteur;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.zip.DataFormatException;
 
-import android.text.format.DateFormat;
-import android.text.format.Time;
-import android.util.Log;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TestCapteurActivity extends Activity implements View.OnClickListener
 {
 
 	private Button b = null;
-	private TextView text = null;
 	private Boolean isStarted = false;
-	private Sensor accelerometer = null;
-	private long lastTimestamp = 0;
-	private long delais = 0;
 	
 	private CapteurManager capteurManager;
 
