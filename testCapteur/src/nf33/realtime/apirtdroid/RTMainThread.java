@@ -8,13 +8,23 @@ public class RTMainThread extends Thread
 {
 	final long convertNanoToMilli = 1000000;
 	
+	//durée maximal de recuperation des capteurs
 	private long _maxDurationCap;
+	//durée maximal d'execution de la fonction utilisateur
 	private long _maxDurationExe;
+	//Classe de calcul utilisateur à executer
 	private RTRunnable _runnable;
-	
+		
+	public RTMainThread(RTRunnable _runnable)
+	{
+		super();
+		this._runnable = _runnable;
+	}
+
 
 	public void run()
-	{		
+	{
+
 		long beginTimeExe = 0; 								//stock le temps du début de l'execution
 		long endTimeExe = 0;								//stock le temps de la fin de l'execution
 		long dateCap = 0;									//stock le temps de recuperation des capteurs

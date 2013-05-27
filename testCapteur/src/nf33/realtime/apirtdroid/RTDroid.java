@@ -81,7 +81,7 @@ public final class RTDroid
 		
 		
 		 // Lancement du thread principal RTMainThread
-		_threadPrincipal = new RTMainThread();
+		_threadPrincipal = new RTMainThread(runnable);
 		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteur);
 		_threadPrincipal.set_maxDurationExe(maxDurationExecution);
 		_threadPrincipal.start();
