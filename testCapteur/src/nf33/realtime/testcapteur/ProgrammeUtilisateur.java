@@ -9,10 +9,9 @@ public class ProgrammeUtilisateur implements Runnable
 
 	private RTDroid rtdroid;
 	
-	ProgrammeUtilisateur(Activity activity)
+	ProgrammeUtilisateur(RTDroid rtdroid)
 	{
-		rtdroid = new RTDroid(activity);
-		rtdroid.declare(this, rtdroid.getCapteurManager().getListeCapteurs());
+		this.rtdroid = rtdroid;
 	}
 	
 	

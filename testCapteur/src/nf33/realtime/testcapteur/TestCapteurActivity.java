@@ -16,6 +16,8 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
 	private Button b = null;
 	private Boolean isStarted = false;
+	private ProgrammeUtilisateur programmeUtilisateur;
+	private RTDroid rtdroid;
 	
 
 	
@@ -36,7 +38,9 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		// ajout d'un listener sur le bouton
 		b = (Button) findViewById(R.id.bouton);
 		b.setOnClickListener(this);
-
+		rtdroid = new RTDroid(this);
+		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid);
+		rtdroid.declare(programmeUtilisateur, rtdroid.getCapteurManager().getListeCapteurs());
 		
 
 	}
@@ -61,11 +65,13 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		{
 			isStarted = true;
 			b.setText(R.string.boutonStop);
+			rtdroid.run();
+			
 			
 		}
 		else
 		{
-			b.setText(R.string.boutonStart);
+			//b.setText(R.string.boutonStart);
 		}
 		
 
