@@ -71,7 +71,9 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		}
 		else
 		{
-			//b.setText(R.string.boutonStart);
+			b.setText(R.string.boutonStart);
+			rtdroid.stop();
+			isStarted = false;
 		}
 		
 
