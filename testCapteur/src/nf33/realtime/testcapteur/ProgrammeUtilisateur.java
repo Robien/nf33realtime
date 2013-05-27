@@ -2,9 +2,9 @@ package nf33.realtime.testcapteur;
 
 import android.app.Activity;
 import nf33.realtime.apirtdroid.RTDroid;
-import nf33.realtime.apirtdroid.Runnable;
+import nf33.realtime.apirtdroid.RTRunnable;
 
-public class ProgrammeUtilisateur implements Runnable
+public class ProgrammeUtilisateur implements RTRunnable
 {
 
 	private RTDroid rtdroid;
@@ -20,6 +20,14 @@ public class ProgrammeUtilisateur implements Runnable
 	{
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	public void endConfiguration(Boolean isRunable, float frequence)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }
