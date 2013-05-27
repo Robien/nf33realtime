@@ -40,7 +40,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		b.setOnClickListener(this);
 		rtdroid = new RTDroid(this);
 		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid);
-		rtdroid.declare(programmeUtilisateur, rtdroid.getCapteurManager().getListeCapteurs());
+		rtdroid.declare(programmeUtilisateur, rtdroid.getCapteurManager().getListeCapteurs(), 0l);
 		
 
 	}

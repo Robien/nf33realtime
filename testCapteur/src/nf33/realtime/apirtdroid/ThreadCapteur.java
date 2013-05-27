@@ -8,12 +8,14 @@ public class ThreadCapteur extends Thread
 	private CapteurManager capteurManager;
 	private RTRunnable programmeUtilisateur;
 	private RTDroid rtdroid;
+	private Long periodeDemande;
 
-	public ThreadCapteur(CapteurManager mgr, RTRunnable programmeUtilisateur, RTDroid rtdroid)
+	public ThreadCapteur(CapteurManager mgr, RTRunnable programmeUtilisateur, RTDroid rtdroid, Long periodeDemande)
 	{
 		capteurManager = mgr;
 		this.programmeUtilisateur = programmeUtilisateur;
 		this.rtdroid = rtdroid;
+		this.periodeDemande = periodeDemande;  
 
 	}
 
@@ -40,7 +42,21 @@ public class ThreadCapteur extends Thread
 		}
 		while (capteurManager.nextCapteur());
 		capteurManager.stopMesure();
-		programmeUtilisateur.endConfiguration(true, capteurManager.getPeriodeMax());
-		rtdroid.enConfiguration();
+		Long max = capteurManager.getPeriodeMax();
+		if (periodeDemande >=  max)
+		{
+			rtdroid.enConfiguration(true, periodeDemande);
+			programmeUtilisateur.endConfiguration(true, periodeDemande);
+		}
+		else if (periodeDemande == 0)
+		{
+			rtdroid.enConfiguration(true, max);
+			programmeUtilisateur.endConfiguration(true, max);
+		}
+		else
+		{
+			rtdroid.enConfiguration(true, 0l);
+			programmeUtilisateur.endConfiguration(false, 0l);
+		}
 	}
 }

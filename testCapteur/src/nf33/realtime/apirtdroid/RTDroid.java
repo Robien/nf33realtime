@@ -9,6 +9,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.content.MutableContextWrapper;
+import android.util.Log;
+import android.widget.Toast;
 
 
 /**
@@ -34,6 +36,7 @@ public final class RTDroid
 	private Long maxDurationCapteur;
 	private Long maxDurationExecution;
 
+	private Boolean isPossible;
 	
 	public RTDroid(Activity activity)
 	{
@@ -45,7 +48,7 @@ public final class RTDroid
 		maxDurationExecution = 0l;
 	}
 
-	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs)
+	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)
 	{
 
 		this.runnable = runnable;
@@ -64,7 +67,7 @@ public final class RTDroid
 		mutexConfigurationEnCours.lock();
 		configurationEnCours++;
 		mutexConfigurationEnCours.unlock();
-		threadCapteur = new ThreadCapteur(capteurManager, runnable, this);
+		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande);
 		threadCapteur.start();
 		return null;
 	}
@@ -103,11 +106,13 @@ public final class RTDroid
 		return this.capteurManager;
 	}
 	
-	public void enConfiguration()
+	public void enConfiguration(Boolean isPossible, Long periode)
 	{
 		mutexConfigurationEnCours.lock();
 		configurationEnCours--;
 		mutexConfigurationEnCours.unlock();
+		this.isPossible = isPossible;
+		Log.d("DADU", "valeur de la période : " + periode);
 	}
 	
 }

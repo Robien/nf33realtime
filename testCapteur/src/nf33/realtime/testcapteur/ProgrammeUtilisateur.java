@@ -18,7 +18,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 
 
 	@Override
-	public void endConfiguration(Boolean isRunable, float frequence)
+	public void endConfiguration(Boolean isRunable, Long frequence)
 	{
 		// TODO Auto-generated method stub
 		
