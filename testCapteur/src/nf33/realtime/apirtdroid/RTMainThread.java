@@ -9,7 +9,7 @@ import android.util.Log;
 public class RTMainThread extends Thread
 {
 	//Conversion de Nanoseconde a Milliseconde
-	static final long convertNanoToMilli = 1000000;
+	static final float convertNanoToMilli = 1000000;
 	
 	//durée maximal de recuperation des capteurs (en nano)
 	private long _maxDurationCap;
@@ -35,14 +35,13 @@ public class RTMainThread extends Thread
 		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		
 		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
-		Log.d("DADU", "1");
+
 		while(true)
 		{
-			Log.d("DADU", "2");
 			//Attente de la fin de la periode
 			try
 			{
-				Thread.sleep(_maxDurationCap/convertNanoToMilli);	//attend la fin de la fenetre de capture des données capteurs
+				Thread.sleep(toMilli(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
 			}
 			catch (InterruptedException e)
 			{
@@ -50,7 +49,7 @@ public class RTMainThread extends Thread
 				e.printStackTrace();
 			}
 			
-			Log.d("DADU", "3");
+
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
 			//recuperation des données capteurs
 			//TODO
@@ -58,17 +57,19 @@ public class RTMainThread extends Thread
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
-			Log.d("DADU", "periode : " +thisPeriode + "ns = " + (thisPeriode/1000000000) + "s");
+			Log.d("DADU", "periode : " +thisPeriode + "ns = " + toMilli(thisPeriode) + "ms");
 			//Appel de la methode à executer 
 			_runnable.periodicEvent(thisPeriode);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde 
 			
-			Log.d("DADU", "4");
-			needSleep = (long) ((_maxDurationExe-((endTimeExe - beginTimeExe))/((float)convertNanoToMilli))); //calcul du temps d'execution réel de la methode
+
+			needSleep = toMilli(_maxDurationExe-(endTimeExe - beginTimeExe)); //calcul du temps d'execution réel de la methode
 			Log.d("DADU", "5 : " + needSleep);
 			if(needSleep<0)
 			{
 				//erreur, execution plus long que prévu
+				Log.e("DADU", "Erreur le temps de sleep est negatif du wait exe");
+				needSleep = 0;
 			}
 			
 			//Attente de la fin de la periode d'execution
@@ -81,7 +82,6 @@ public class RTMainThread extends Thread
 				Log.e("DADU", "execption sleep execution" );
 				e.printStackTrace();
 			}
-			Log.d("DADU", "6");
 		
 		}
 	}
@@ -109,7 +109,7 @@ public class RTMainThread extends Thread
 	
 	static long toMilli(long nano)
 	{
-		return nano/convertNanoToMilli;
+		return (long)(nano/convertNanoToMilli);
 	}
 	
 	
