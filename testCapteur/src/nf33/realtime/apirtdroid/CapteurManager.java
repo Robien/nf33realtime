@@ -15,6 +15,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.view.ViewDebug.CapturedViewProperty;
 
 /**
  * @author Romain
@@ -178,16 +179,18 @@ public class CapteurManager implements SensorEventListener
 		if (delais > delaisCapteursMax.get(idCapteurCourant))
 		{
 			delaisCapteursMax.set(idCapteurCourant, delais);
+			capteurCourant.setMaxPeriode(delais);
 //			activity.newMax(delais);
 		}
-		// Log.d("MESURE", delais + "");
+		 Log.d("MESURE", delais + "");
 		// String chaine = new String("delais : " + delais + "ns");
 		// fichier.write(chaine);
 	}
 
 	private void start()
 	{
-		Log.d("DADU", "start : demande de capteur");
+		setIdCapteurCourant(0);
+		Log.d("DADU", "start : demande de capteur numéro " + capteurCourant.getId());
 		// fichier.openFile();
 		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
 	}
@@ -232,6 +235,18 @@ public class CapteurManager implements SensorEventListener
 	{
 		return (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 	}
-	
+	public Long getPeriodeMax()
+	{
+		Long max = 0l;
+		for (Capteur capteur : capteurs)
+		{
+			if (max < capteur.getMaxPeriode())
+			{
+				max = capteur.getMaxPeriode();
+			}
+		}
+		
+		return max;
+	}
 	
 }

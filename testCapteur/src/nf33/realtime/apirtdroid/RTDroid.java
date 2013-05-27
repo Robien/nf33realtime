@@ -58,7 +58,7 @@ public final class RTDroid
 		mutexConfigurationEnCours.lock();
 		configurationEnCours++;
 		mutexConfigurationEnCours.unlock();
-		threadCapteur = new ThreadCapteur(capteurManager, runnable);
+		threadCapteur = new ThreadCapteur(capteurManager, runnable, this);
 		threadCapteur.start();
 		return null;
 	}

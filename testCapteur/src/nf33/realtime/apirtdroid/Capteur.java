@@ -15,12 +15,14 @@ public class Capteur
 	private int id;
 	private Sensor sensor;
 	private boolean isUsed;
+	private Long maxPeriod;
 
 	public Capteur(int id, Sensor sensor, Boolean isUsed)
 	{
 		setId(id);
 		setSensor(sensor);
 		setIsUsed(isUsed);
+		maxPeriod = 0l;
 	}
 	public Capteur(int id, Sensor sensor)
 	{
@@ -58,5 +60,17 @@ public class Capteur
 	{
 		return this.isUsed;
 	}
+	
+	public void setMaxPeriode(Long maxPeriode)
+	{
+		this.maxPeriod = maxPeriode;
+	}
+	
+	public Long getMaxPeriode()
+	{
+		return maxPeriod;
+	}
+	
+	
 
 }
