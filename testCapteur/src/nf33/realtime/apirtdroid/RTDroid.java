@@ -75,18 +75,20 @@ public final class RTDroid
 	public Boolean launch()
 	{
 		mutexConfigurationEnCours.lock();
-		if (configurationEnCours > 0)
+		if (configurationEnCours > 0 && isPossible)
 		{
 			mutexConfigurationEnCours.unlock();
 			return false;
 		}
 		mutexConfigurationEnCours.unlock();
 		
-		
-		 // Lancement du thread principal RTMainThread
+		 // creation du thread principal RTMainThread
 		_threadPrincipal = new RTMainThread(runnable);
+		 // configuration du temps de capteur max
 		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteur);
+		 // configuration du temps de exe max
 		_threadPrincipal.set_maxDurationExe(maxDurationExecution);
+		 // Lancement du thread principal RTMainThread
 		_threadPrincipal.start();
  
 		 

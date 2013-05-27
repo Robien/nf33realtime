@@ -1,16 +1,19 @@
 package nf33.realtime.apirtdroid;
 
+import android.util.Log;
+
 /**
  * @author Seg_fault_
  * 
  */
 public class RTMainThread extends Thread
 {
+	//Conversion de Nanoseconde a Milliseconde
 	final long convertNanoToMilli = 1000000;
 	
-	//durée maximal de recuperation des capteurs
+	//durée maximal de recuperation des capteurs (en nano)
 	private long _maxDurationCap;
-	//durée maximal d'execution de la fonction utilisateur
+	//durée maximal d'execution de la fonction utilisateur  (en nano)
 	private long _maxDurationExe;
 	//Classe de calcul utilisateur à executer
 	private RTRunnable _runnable;
@@ -25,11 +28,11 @@ public class RTMainThread extends Thread
 	public void run()
 	{
 
-		long beginTimeExe = 0; 								//stock le temps du début de l'execution
-		long endTimeExe = 0;								//stock le temps de la fin de l'execution
-		long dateCap = 0;									//stock le temps de recuperation des capteurs
-		long needSleep =0; 									//temps de sleep
-		long thisPeriode = 0; 								//temps entre les deux dernier execution
+		long beginTimeExe = 0; 								//stock le temps du début de l'execution  (en nano)
+		long endTimeExe = 0;								//stock le temps de la fin de l'execution  (en nano)
+		long dateCap = 0;									//stock le temps de recuperation des capteurs  (en nano)
+		long needSleep =0; 									//temps de sleep  (en milli)
+		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		
 		while(true)
 		{
@@ -40,6 +43,7 @@ public class RTMainThread extends Thread
 			}
 			catch (InterruptedException e)
 			{
+				Log.e("DADU", "execption sleep capteur" );
 				e.printStackTrace();
 			}
 			
@@ -50,6 +54,7 @@ public class RTMainThread extends Thread
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 			thisPeriode = endTimeExe-beginTimeExe; 			//calcul de la periode exacte 
+			Log.d("DADU", "periode : " +thisPeriode + "ns" );
 			//Appel de la methode à executer 
 			_runnable.periodicEvent(thisPeriode);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde 
@@ -67,6 +72,7 @@ public class RTMainThread extends Thread
 			}
 			catch (InterruptedException e)
 			{
+				Log.e("DADU", "execption sleep execution" );
 				e.printStackTrace();
 			}
 		
