@@ -18,7 +18,6 @@ import android.content.MutableContextWrapper;
 public final class RTDroid
 {
 
-	
 	private Activity activity;
 	private CapteurManager capteurManager;
 	
@@ -29,7 +28,8 @@ public final class RTDroid
 												// capteurs pour chaque runable
 	private Integer configurationEnCours;
 	private ReentrantLock mutexConfigurationEnCours;
-	ThreadCapteur threadCapteur;
+	private ThreadCapteur threadCapteur;
+	private RTMainThread _threadPrincipal; //Thread de gestion de l'execution
 
 	public RTDroid(Activity activity)
 	{
@@ -73,14 +73,21 @@ public final class RTDroid
 		}
 		mutexConfigurationEnCours.unlock();
 		
-		//mettre ici le thread principal
+		
+		 // Lancement du thread principal RTMainThread
+		_threadPrincipal = new RTMainThread();
+		  
+		_threadPrincipal.start();
+ 
+		 
+		
 		
 		return true;
 	}
 
 	public Boolean stop()
 	{
-
+		_threadPrincipal.interrupt();
 		return false;
 	}
 

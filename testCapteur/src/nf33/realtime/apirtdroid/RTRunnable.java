@@ -10,7 +10,7 @@ package nf33.realtime.apirtdroid;
 public interface RTRunnable
 {
 	
-	public abstract void periodicEvent();
+	public abstract void periodicEvent(long timeSinceLast);
 	public abstract void endConfiguration(Boolean isRunable, float frequence);
 
 }

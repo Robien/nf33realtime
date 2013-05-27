@@ -14,17 +14,21 @@ public class ProgrammeUtilisateur implements RTRunnable
 		this.rtdroid = rtdroid;
 	}
 	
-	
-	@Override
-	public void periodicEvent()
-	{
-		// TODO Auto-generated method stub
 
-	}
 
 
 	@Override
 	public void endConfiguration(Boolean isRunable, float frequence)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	public void periodicEvent(long timeSinceLast)
 	{
 		// TODO Auto-generated method stub
 		
