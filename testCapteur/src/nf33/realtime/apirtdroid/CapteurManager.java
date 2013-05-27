@@ -61,16 +61,21 @@ public class CapteurManager implements SensorEventListener
 		for (Sensor sensor : listCapteurs)
 		{
 			i++;
-			capteurs.add(new Capteur(i, sensor));
+			Capteur capteurTmp = new Capteur(i, sensor);
+			capteurs.add(capteurTmp);
+			capteurTmp.setName(sensor.getName());
 			listeCapteursTexte += sensor.getName() + "\n";
 			delaisCapteurs.add(new ArrayList<Long>());
 			if (getFromSauv && fichier.read().equals(sensor.getName()))
 			{
-				delaisCapteursMax.add(Long.valueOf(fichier.read()));
+				Long tmpLong = Long.valueOf(fichier.read());
+				delaisCapteursMax.add(tmpLong);
+				capteurTmp.setMaxPeriode(tmpLong);
 			}
 			else
 			{
 				delaisCapteursMax.add(Long.valueOf(0));
+				capteurTmp.setMaxPeriode(Long.valueOf(0));
 			}
 		}
 		if (getFromSauv)
@@ -190,7 +195,6 @@ public class CapteurManager implements SensorEventListener
 	private void start()
 	{
 		setIdCapteurCourant(0);
-		Log.d("DADU", "start : demande de capteur numéro " + capteurCourant.getId());
 		// fichier.openFile();
 		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
 	}
@@ -247,6 +251,11 @@ public class CapteurManager implements SensorEventListener
 		}
 		
 		return max;
+	}
+	
+	public Capteur getCurrentCapteur()
+	{
+		return capteurs.get(idCapteurCourant);
 	}
 	
 }

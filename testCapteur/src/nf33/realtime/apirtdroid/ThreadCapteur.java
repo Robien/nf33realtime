@@ -21,20 +21,25 @@ public class ThreadCapteur extends Thread
 	{
 
 		capteurManager.startMesure();
-		while (capteurManager.nextCapteur())
+		do
 		{
-			try
+			Log.d("DADU", "test du capteur n°" + capteurManager.getCurrentCapteur().getId() + " : " + capteurManager.getCurrentCapteur().getName());
+			while (capteurManager.getCurrentCapteur().getMaxPeriode() == 0l)
 			{
-				Log.d("DADU", "début attente");
-				Thread.sleep(10000);
-				Log.d("DADU", "fin attente");
-			}
-			catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.d("DAD", "aucune donnée, on continu");
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		while (capteurManager.nextCapteur());
+		capteurManager.stopMesure();
 		programmeUtilisateur.endConfiguration(true, capteurManager.getPeriodeMax());
 		rtdroid.enConfiguration();
 	}

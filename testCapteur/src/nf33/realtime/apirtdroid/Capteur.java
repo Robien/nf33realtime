@@ -16,6 +16,7 @@ public class Capteur
 	private Sensor sensor;
 	private boolean isUsed;
 	private Long maxPeriod;
+	private String name;
 
 	public Capteur(int id, Sensor sensor, Boolean isUsed)
 	{
@@ -23,12 +24,15 @@ public class Capteur
 		setSensor(sensor);
 		setIsUsed(isUsed);
 		maxPeriod = 0l;
+		name = new String("");
 	}
 	public Capteur(int id, Sensor sensor)
 	{
 		setId(id);
 		setSensor(sensor);
 		setIsUsed(false);
+		maxPeriod = 0l;
+		name = new String("");
 	}
 
 	public void setId(int id)
@@ -71,6 +75,15 @@ public class Capteur
 		return maxPeriod;
 	}
 	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
 	
 
 }
