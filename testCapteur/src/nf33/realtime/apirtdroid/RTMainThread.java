@@ -63,7 +63,9 @@ public class RTMainThread extends Thread
 			_runnable.periodicEvent(thisPeriode);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde 
 			
-			needSleep = (_maxDurationExe-((endTimeExe - beginTimeExe))/convertNanoToMilli); //calcul du temps d'execution réel de la methode
+			Log.d("DADU", "4");
+			needSleep = (long) ((_maxDurationExe-((endTimeExe - beginTimeExe))/((float)convertNanoToMilli))); //calcul du temps d'execution réel de la methode
+			Log.d("DADU", "5 : " + needSleep);
 			if(needSleep<0)
 			{
 				//erreur, execution plus long que prévu
@@ -79,6 +81,7 @@ public class RTMainThread extends Thread
 				Log.e("DADU", "execption sleep execution" );
 				e.printStackTrace();
 			}
+			Log.d("DADU", "6");
 		
 		}
 	}

@@ -45,7 +45,7 @@ public final class RTDroid
 		this.activity = activity;
 		configurationEnCours = 0;
 		maxDurationCapteur = 0l;
-		maxDurationExecution = 0l;
+		maxDurationExecution = 1000000000l;
 	}
 
 	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)
@@ -114,7 +114,7 @@ public final class RTDroid
 		configurationEnCours--;
 		mutexConfigurationEnCours.unlock();
 		this.isPossible = isPossible;
-		Log.d("DADU", "valeur de la période : " + (periode/1000000000));
+		Log.d("DADU", "valeur de la période : " + (periode));
 		maxDurationCapteur = periode;
 	}
 	
