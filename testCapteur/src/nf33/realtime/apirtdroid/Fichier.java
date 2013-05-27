@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,6 +27,7 @@ public class Fichier
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private String name;
+	private Logs log;
 
 	Fichier(String name, boolean addDate)
 	{
@@ -74,7 +76,8 @@ public class Fichier
 		}
 		catch (Exception e)
 		{
-			Log.d("Fichier", "Erreur à l'ouverture : " + e.getMessage());
+			log.affiche_log("Erreur à l'ouverture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à l'ouverture : " + e.getMessage());
 		}
 
 	}
@@ -94,7 +97,8 @@ public class Fichier
 		}
 		catch (Exception e)
 		{
-			Log.d("Fichier", "Erreur à l'ouverture : " + e.getMessage());
+			log.affiche_log("Erreur à l'ouverture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à l'ouverture : " + e.getMessage());
 		}
 		return false;
 	}
@@ -108,9 +112,11 @@ public class Fichier
 		}
 		catch (IOException e)
 		{
-			Log.d("Fichier", "Erreur à l'écriture : " + e.getMessage());
+			log.affiche_log("Erreur à l'écriture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à l'écriture : " + e.getMessage());
 		}
 	}
+	
 	public String read()
 	{
 		
@@ -125,7 +131,8 @@ public class Fichier
 		}
 		catch (IOException e)
 		{
-			Log.d("Fichier", "Erreur à l'écriture : " + e.getMessage());
+			log.affiche_log("Erreur à l'écriture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à l'écriture : " + e.getMessage());
 		}
 		return "";
 	}
@@ -141,9 +148,12 @@ public class Fichier
 		}
 		catch (IOException e)
 		{
-			Log.d("Fichier", "Erreur à la fermeture : " + e.getMessage());
+			log.affiche_log("Erreur à la fermeture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à la fermeture : " + e.getMessage());
 		}
 	}
+	
+	
 	public void closeReader()
 	{
 		
@@ -153,8 +163,8 @@ public class Fichier
 		}
 		catch (IOException e)
 		{
-			Log.d("Fichier", "Erreur à la fermeture : " + e.getMessage());
+			log.affiche_log("Erreur à la fermeture : " + e.getMessage());
+			//Log.d("Fichier", "Erreur à la fermeture : " + e.getMessage());
 		}
 	}
-
 }
