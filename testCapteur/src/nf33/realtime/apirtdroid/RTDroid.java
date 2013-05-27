@@ -114,7 +114,8 @@ public final class RTDroid
 		configurationEnCours--;
 		mutexConfigurationEnCours.unlock();
 		this.isPossible = isPossible;
-		Log.d("DADU", "valeur de la période : " + periode);
+		Log.d("DADU", "valeur de la période : " + (periode/1000000000));
+		maxDurationCapteur = periode;
 	}
 	
 }

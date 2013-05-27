@@ -147,7 +147,7 @@ public class CapteurManager implements SensorEventListener
 	{
 		if (activity != null)
 		{
-//			activity.newMax(delaisCapteursMax.get(idCapteurCourant));
+			// activity.newMax(delaisCapteursMax.get(idCapteurCourant));
 		}
 		start();
 	}
@@ -185,9 +185,9 @@ public class CapteurManager implements SensorEventListener
 		{
 			delaisCapteursMax.set(idCapteurCourant, delais);
 			capteurCourant.setMaxPeriode(delais);
-//			activity.newMax(delais);
+			// activity.newMax(delais);
 		}
-		 Log.d("MESURE", delais + "");
+		Log.d("MESURE", delais + "");
 		// String chaine = new String("delais : " + delais + "ns");
 		// fichier.write(chaine);
 	}
@@ -215,7 +215,7 @@ public class CapteurManager implements SensorEventListener
 			{
 				if (activity != null)
 				{
-//					activity.newMax(delaisCapteursMax.get(idCapteurCourant));
+					// activity.newMax(delaisCapteursMax.get(idCapteurCourant));
 				}
 
 				for (int j = 0; j < 1000000; ++j)
@@ -235,27 +235,32 @@ public class CapteurManager implements SensorEventListener
 			}
 		}
 	}
+
 	public SensorManager getSensorManager()
 	{
 		return (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
 	}
+
 	public Long getPeriodeMax()
 	{
 		Long max = 0l;
 		for (Capteur capteur : capteurs)
 		{
-			if (max < capteur.getMaxPeriode())
+			if (capteur.isUsed())
 			{
-				max = capteur.getMaxPeriode();
+				if (max < capteur.getMaxPeriode())
+				{
+					max = capteur.getMaxPeriode();
+				}
 			}
 		}
-		
+
 		return max;
 	}
-	
+
 	public Capteur getCurrentCapteur()
 	{
 		return capteurs.get(idCapteurCourant);
 	}
-	
+
 }

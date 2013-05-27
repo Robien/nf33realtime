@@ -4,6 +4,7 @@
 package nf33.realtime.apirtdroid;
 
 import android.hardware.Sensor;
+import android.util.Log;
 
 /**
  * @author Seg_fault_
@@ -57,6 +58,7 @@ public class Capteur
 
 	public void setIsUsed(Boolean isUsed)
 	{
+		Log.d("DADU", id + " isUsed");
 		this.isUsed = isUsed;
 	}
 

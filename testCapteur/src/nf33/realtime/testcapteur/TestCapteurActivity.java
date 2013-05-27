@@ -1,6 +1,9 @@
 package nf33.realtime.testcapteur;
 
 
+import java.util.ArrayList;
+
+import nf33.realtime.apirtdroid.Capteur;
 import nf33.realtime.apirtdroid.RTDroid;
 import android.app.Activity;
 import android.content.Context;
@@ -40,7 +43,12 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		b.setOnClickListener(this);
 		rtdroid = new RTDroid(this);
 		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid);
-		rtdroid.declare(programmeUtilisateur, rtdroid.getCapteurManager().getListeCapteurs(), 0l);
+		
+		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
+		
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
+		
+		rtdroid.declare(programmeUtilisateur, listeCapteur, 0l);
 		
 
 	}

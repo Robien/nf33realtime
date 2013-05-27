@@ -34,12 +34,15 @@ public class RTMainThread extends Thread
 		long needSleep =0; 									//temps de sleep  (en milli)
 		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		
+		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
+		Log.d("DADU", "1");
 		while(true)
 		{
+			Log.d("DADU", "2");
 			//Attente de la fin de la periode
 			try
 			{
-				Thread.sleep(_maxDurationCap);				//attend la fin de la fenetre de capture des données capteurs
+				Thread.sleep(_maxDurationCap/convertNanoToMilli);	//attend la fin de la fenetre de capture des données capteurs
 			}
 			catch (InterruptedException e)
 			{
@@ -47,19 +50,20 @@ public class RTMainThread extends Thread
 				e.printStackTrace();
 			}
 			
+			Log.d("DADU", "3");
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
 			//recuperation des données capteurs
 			//TODO
 
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
-			thisPeriode = endTimeExe-beginTimeExe; 			//calcul de la periode exacte 
-			Log.d("DADU", "periode : " +thisPeriode + "ns" );
+			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
+			Log.d("DADU", "periode : " +thisPeriode + "ns = " + (thisPeriode/1000000000) + "s");
 			//Appel de la methode à executer 
 			_runnable.periodicEvent(thisPeriode);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde 
 			
-			needSleep = _maxDurationExe-((beginTimeExe-endTimeExe)*convertNanoToMilli); //calcul du temps d'execution réel de la methode
+			needSleep = (_maxDurationExe-((endTimeExe - beginTimeExe))/convertNanoToMilli); //calcul du temps d'execution réel de la methode
 			if(needSleep<0)
 			{
 				//erreur, execution plus long que prévu
