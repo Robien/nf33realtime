@@ -45,7 +45,7 @@ public final class RTDroid
 		this.activity = activity;
 		configurationEnCours = 0;
 		maxDurationCapteur = 0l;
-		maxDurationExecution = 1000000000l;
+		maxDurationExecution = 100000000l;
 	}
 
 	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)

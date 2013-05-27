@@ -47,6 +47,7 @@ public class RTMainThread extends Thread
 			{
 				Log.e("DADU", "execption sleep capteur" );
 				e.printStackTrace();
+				break;
 			}
 			
 
@@ -81,6 +82,7 @@ public class RTMainThread extends Thread
 			{
 				Log.e("DADU", "execption sleep execution" );
 				e.printStackTrace();
+				break;
 			}
 		
 		}
