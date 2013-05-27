@@ -31,12 +31,18 @@ public final class RTDroid
 	private ThreadCapteur threadCapteur;
 	private RTMainThread _threadPrincipal; //Thread de gestion de l'execution
 
+	private Long maxDurationCapteur;
+	private Long maxDurationExecution;
+
+	
 	public RTDroid(Activity activity)
 	{
 		capteurManager = new CapteurManager(activity);
 		//capteursUtilise = new ArrayList<Capteur>();
 		this.activity = activity;
 		configurationEnCours = 0;
+		maxDurationCapteur = 0l;
+		maxDurationExecution = 0l;
 	}
 
 	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs)
@@ -63,7 +69,7 @@ public final class RTDroid
 		return null;
 	}
 
-	public Boolean run()
+	public Boolean launch()
 	{
 		mutexConfigurationEnCours.lock();
 		if (configurationEnCours > 0)
@@ -76,7 +82,8 @@ public final class RTDroid
 		
 		 // Lancement du thread principal RTMainThread
 		_threadPrincipal = new RTMainThread();
-		  
+		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteur);
+		_threadPrincipal.set_maxDurationExe(maxDurationExecution);
 		_threadPrincipal.start();
  
 		 
