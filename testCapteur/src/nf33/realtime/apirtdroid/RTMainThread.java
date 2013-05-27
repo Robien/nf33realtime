@@ -9,7 +9,7 @@ import android.util.Log;
 public class RTMainThread extends Thread
 {
 	//Conversion de Nanoseconde a Milliseconde
-	final long convertNanoToMilli = 1000000;
+	static final long convertNanoToMilli = 1000000;
 	
 	//durée maximal de recuperation des capteurs (en nano)
 	private long _maxDurationCap;
@@ -107,5 +107,10 @@ public class RTMainThread extends Thread
 		this._maxDurationExe = _maxDurationExe;
 	}
 	
-
+	static long toMilli(long nano)
+	{
+		return nano/convertNanoToMilli;
+	}
+	
+	
 }
