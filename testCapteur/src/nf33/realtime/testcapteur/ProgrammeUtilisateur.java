@@ -3,6 +3,8 @@ package nf33.realtime.testcapteur;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import nf33.realtime.apirtdroid.CapteurValue;
 import nf33.realtime.apirtdroid.RTDroid;
@@ -10,12 +12,13 @@ import nf33.realtime.apirtdroid.RTRunnable;
 
 public class ProgrammeUtilisateur implements RTRunnable
 {
-
+	private Handler mHandler;
 	private RTDroid rtdroid;
 	
-	ProgrammeUtilisateur(RTDroid rtdroid)
+	ProgrammeUtilisateur(RTDroid rtdroid, Handler handler)
 	{
 		this.rtdroid = rtdroid;
+		mHandler = handler;
 	}
 	
 
@@ -38,6 +41,9 @@ public class ProgrammeUtilisateur implements RTRunnable
 		try
 		{
 			Thread.sleep((long) (Math.random()*90), 0);
+			Message msg = mHandler.obtainMessage();
+			msg.obj = new String("periode : " +timeSinceLast);
+            mHandler.sendMessage(msg);
 		}
 		catch (InterruptedException e)
 		{

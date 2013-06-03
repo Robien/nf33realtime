@@ -10,19 +10,31 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class TestCapteurActivity extends Activity implements View.OnClickListener
 {
 
 	private Button b = null;
+	private TextView texte = null;
 	private Boolean isStarted = false;
 	private ProgrammeUtilisateur programmeUtilisateur;
 	private RTDroid rtdroid;
 	
-
+	  // Gère les communications avec le thread de téléchargement
+	  final private Handler mHandler = new Handler(){
+	    @Override
+	    public void handleMessage(Message msg) {
+	      super.handleMessage(msg);
+	      // L'avancement se situe dans msg.arg1
+	      texte.setText((String)msg.obj);
+	    }
+	  };
 	
 
 	/** Called when the activity is first created. */
@@ -38,9 +50,12 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
 		// ajout d'un listener sur le bouton
 		b = (Button) findViewById(R.id.bouton);
+		
+		texte = (TextView)findViewById(R.id.infocapteurs);
+		
 		b.setOnClickListener(this);
 		rtdroid = new RTDroid(this);
-		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid);
+		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid, mHandler);
 		
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
