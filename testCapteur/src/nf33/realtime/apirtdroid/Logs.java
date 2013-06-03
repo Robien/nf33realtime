@@ -13,6 +13,7 @@ public class Logs
 {
 	//Fichier journalLog
 	private Fichier journalLog;
+	private ThreadLog LastThread = null;
 	
 	//constructeur
 	Logs() 
@@ -34,7 +35,8 @@ public class Logs
 	public void threaded_write(String log)
 	{
 		//ecriture dans le fichier dans un thread
-		new ThreadLog(log).start();
+		LastThread = new ThreadLog(log);
+		LastThread.start();
 	}
 	
 	public void write(String log)
@@ -45,6 +47,16 @@ public class Logs
 	
 	public void closeLog()
 	{
+		try
+		{
+			LastThread.join(10);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			Log.d("DetDroid","Erreur join Thread ecriture");
+			e.printStackTrace();
+		}
 		journalLog.close();
 	}
 	
