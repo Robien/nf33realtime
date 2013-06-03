@@ -82,8 +82,8 @@ public class RTMainThread extends Thread
 			{
 				if(_logActived)
 				{
-					_log.threaded_write("End execution");
-					_log.affiche_log("End execution");
+					_log.threaded_write("End execution, "+  System.nanoTime());
+					_log.affiche_log("End execution"+  System.nanoTime());
 				}
 				_log.closeLog();
 				break; //stop the Thread
@@ -93,19 +93,18 @@ public class RTMainThread extends Thread
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
 			if(_logActived)
 			{
-				_log.threaded_write("Date capteur : " +dateCap + " ns");
-				_log.affiche_log("Date capteur : " +dateCap + " ns");
+				_log.threaded_write("Date capteur : " +timeToString(dateCap) );
+				_log.affiche_log("Date capteur : " +timeToString(dateCap) );
 			}
 			//recuperation des données capteurs
 			//TODO
-
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
 			{
-				_log.threaded_write("Periode : " +thisPeriode + " ns");
-				_log.affiche_log("Periode : " +thisPeriode + "ns");
+				_log.threaded_write("Periode : " +timeToString(thisPeriode) + " precision : "+ (thisPeriode/(_maxDurationCap+_maxDurationExe)));
+				_log.affiche_log("Periode : " +timeToString(thisPeriode) + " precision "+ (thisPeriode/(_maxDurationCap+_maxDurationExe)));
 			}
 			
 			//Appel de la methode à executer 
@@ -118,8 +117,8 @@ public class RTMainThread extends Thread
 			{
 				if(_logActived)
 				{
-					_log.threaded_write("Erreur, execution plus long que prévu : " + (endTimeExe - beginTimeExe));
-					_log.affiche_log("Erreur, execution plus long que prévu" + (endTimeExe - beginTimeExe));
+					_log.threaded_write("Erreur, execution plus long que prévu : " + timeToString(endTimeExe - beginTimeExe));
+					_log.affiche_log("Erreur, execution plus long que prévu" + timeToString(endTimeExe - beginTimeExe));
 				}
 				needSleep = 0;
 			}
@@ -141,8 +140,8 @@ public class RTMainThread extends Thread
 			{
 				if(_logActived)
 				{
-					_log.threaded_write("End execution");
-					_log.threaded_write("End execution");
+					_log.threaded_write("End execution"+  System.nanoTime());
+					_log.threaded_write("End execution"+  System.nanoTime());
 				}
 				_log.closeLog();
 				
@@ -182,6 +181,11 @@ public class RTMainThread extends Thread
 	static private int remainderNano(long nano)
 	{
 		return (int)(nano%convertNanoToMilli);
+	}
+	
+	static private String timeToString(long nano)
+	{
+		return "(" + toMilli(nano) + "ms" + remainderNano(nano) + "ns)";
 	}
 	
 	public synchronized void set_logActived(boolean activelog)
