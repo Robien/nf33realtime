@@ -56,7 +56,7 @@ public class ThreadCapteur extends Thread
 		}
 		else
 		{
-			rtdroid.endConfiguration(true, 0l);
+			rtdroid.endConfiguration(false, 0l);
 			programmeUtilisateur.endConfiguration(false, 0l);
 		}
 	}
