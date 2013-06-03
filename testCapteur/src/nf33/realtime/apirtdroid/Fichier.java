@@ -29,6 +29,7 @@ public class Fichier
 	private String name;
 	private Logs log;
 
+	//constructeur 
 	Fichier(String name, boolean addDate)
 	{
 		if (!addDate)
@@ -41,11 +42,13 @@ public class Fichier
 		}
 	}
 	
+	//constructeur par défault
 	Fichier()
 	{
 		this.name = "data-" + Calendar.getInstance().getTime().toGMTString().replace(' ', '-').replace(':', '-') + ".txt";
 	}
 	
+	//suppression du fichier
 	public boolean delete()
 	{
 		File newfile = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + name);
@@ -60,15 +63,11 @@ public class Fichier
 		}
 	}
 	
-	
+	//ouverture du fichier en mode ecriture
 	public void openFile()
 	{
 		try
 		{
-
-			// SimpleDateFormat dateFormat = new
-			// SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
 			File newfile = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + name);
 			newfile.createNewFile();
 			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(newfile)));
@@ -81,6 +80,8 @@ public class Fichier
 		}
 
 	}
+	
+	//ouverture du fichier en mode lecture
 	public Boolean openFileLecture()
 	{
 		try
@@ -103,6 +104,7 @@ public class Fichier
 		return false;
 	}
 
+	//ecriture dans le ficher
 	public void write(String data)
 	{
 
@@ -117,6 +119,7 @@ public class Fichier
 		}
 	}
 	
+	//lecture dans le fichier
 	public String read()
 	{
 		
@@ -137,7 +140,7 @@ public class Fichier
 		return "";
 	}
 	
-
+	//fermeture du fichier du mode ecriture
 	public void close()
 	{
 
@@ -153,7 +156,7 @@ public class Fichier
 		}
 	}
 	
-	
+	//fermeture du mode de lecture
 	public void closeReader()
 	{
 		
