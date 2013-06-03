@@ -109,8 +109,8 @@ public class RTMainThread extends Thread
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
 			{
-				_log.threaded_write("Periode : " +timeToString(thisPeriode) + " precision : "+ (thisPeriode/(_maxDurationCap+_maxDurationExe)));
-				_log.affiche_log("Periode : " +timeToString(thisPeriode) + " precision "+ (thisPeriode/(_maxDurationCap+_maxDurationExe)));
+				_log.threaded_write("Periode : " +timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.affiche_log("Periode : " +timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
 			}
 			
 			//Appel de la methode à executer 
