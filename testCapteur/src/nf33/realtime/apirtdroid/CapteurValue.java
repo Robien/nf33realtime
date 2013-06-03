@@ -15,6 +15,11 @@ public class CapteurValue
 		this._values = values;
 	}
 	
+	public CapteurValue()
+	{
+		super();
+	}
+	
 	public long getTimestampCaptureAnd()
 	{
 		return _timestampCaptureAnd;

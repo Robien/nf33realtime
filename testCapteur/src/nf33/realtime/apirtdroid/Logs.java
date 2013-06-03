@@ -49,7 +49,7 @@ public class Logs
 	{
 		try
 		{
-			LastThread.join(10);
+			LastThread.join();
 		}
 		catch (InterruptedException e)
 		{

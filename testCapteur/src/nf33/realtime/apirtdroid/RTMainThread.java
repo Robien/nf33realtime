@@ -1,5 +1,7 @@
 package nf33.realtime.apirtdroid;
 
+import java.util.ArrayList;
+
 import android.util.Log;
 
 /**
@@ -23,17 +25,20 @@ public class RTMainThread extends Thread
 	private Logs _log;
 	//type de precision
 	private boolean _nanoAccuracy;
+	
+	private CapteurManager _capteurManager;
 		
-	public RTMainThread(RTRunnable _runnable)
+	public RTMainThread(RTRunnable _runnable, CapteurManager capteurManager)
 	{
 		super();
 		this._runnable = _runnable;
 		_logActived = false;
 		_nanoAccuracy = true;
 		_log = null;
+		_capteurManager = capteurManager;
 	}
 
-	public RTMainThread(RTRunnable _runnable, boolean activelog)
+	public RTMainThread(RTRunnable _runnable, CapteurManager capteurManager, boolean activelog)
 	{
 		super();
 		this._runnable = _runnable;
@@ -47,6 +52,7 @@ public class RTMainThread extends Thread
 		{
 			_log = null;
 		}
+		_capteurManager = capteurManager;
 	}
 
 	public void run()
@@ -67,6 +73,15 @@ public class RTMainThread extends Thread
 			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + _nanoAccuracy);
 		}
 		
+		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
+		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
+		
+		for (Capteur capteur : capteurUtilise)
+		{
+			capteursValues.add(new CapteurValue());
+		}
+		
+		_capteurManager.startCaptureCapteur();
 		
 		//debut de l'execution du code utulisateur
 		while(true)
@@ -103,7 +118,17 @@ public class RTMainThread extends Thread
 				_log.affiche_log("Date capteur : " +timeToString(dateCap) );
 			}
 			//recuperation des données capteurs
-			//TODO
+			for (int i = 0; i < capteurUtilise.size(); i++)
+			{
+				if (capteurUtilise.get(i).getLastSensorEvent() == null)
+				{
+					Log.d("DADU", "4.5 : " + i + " DONNE NON TROUVE !");
+					
+				}
+				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
+				capteursValues.get(i).setTimestampCaptureApi(dateCap);
+				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+			}
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
@@ -114,7 +139,7 @@ public class RTMainThread extends Thread
 			}
 			
 			//Appel de la methode à executer 
-			_runnable.periodicEvent(thisPeriode);	
+			_runnable.periodicEvent(thisPeriode, capteursValues);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde de la fin de lexecution
 			
 
@@ -156,6 +181,7 @@ public class RTMainThread extends Thread
 			}
 		
 		}
+		_capteurManager.stopCapteurCapteur();
 	}
 
 	

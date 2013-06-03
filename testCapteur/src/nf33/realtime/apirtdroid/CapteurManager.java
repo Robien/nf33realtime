@@ -216,6 +216,7 @@ public class CapteurManager implements SensorEventListener
 		}
 		else
 		{
+//			Log.d("MESURE", event.values[0] + "");
 			for (Capteur capteur : capteurs)
 			{
 				if (event.sensor == capteur.getSensor())
@@ -269,5 +270,18 @@ public class CapteurManager implements SensorEventListener
 	{
 		return capteurs.get(idCapteurCourant);
 	}
-
+	
+	public ArrayList<Capteur> getListeCapteurUtilise()
+	{
+		ArrayList<Capteur> listCateurs = new ArrayList<Capteur>();
+		for (Capteur capteur : capteurs)
+		{
+			if (capteur.isUsed())
+			{
+				listCateurs.add(capteur);
+			}
+		}
+		return listCateurs;
+	}
+	
 }

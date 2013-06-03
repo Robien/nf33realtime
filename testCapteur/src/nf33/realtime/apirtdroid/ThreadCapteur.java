@@ -50,7 +50,7 @@ public class ThreadCapteur extends Thread
 		for (int i = 0; i < 100; ++i)
 		{
 			Long debut =  System.nanoTime();
-			programmeUtilisateur.periodicEvent(0);
+			programmeUtilisateur.periodicEvent(0, null);
 			Long tmp = System.nanoTime() - debut;
 			if (total < tmp)
 			{

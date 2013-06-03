@@ -28,6 +28,7 @@ public class Capteur
 		setIsUsed(isUsed);
 		maxPeriod = 0l;
 		name = new String("");
+		lastSensorEvent = null;
 	}
 	public Capteur(int id, Sensor sensor)
 	{
@@ -36,6 +37,7 @@ public class Capteur
 		setIsUsed(false);
 		maxPeriod = 0l;
 		name = new String("");
+		lastSensorEvent = null;
 	}
 
 	public void setId(int id)
