@@ -105,6 +105,7 @@ public class CapteurManager implements SensorEventListener
 
 	public Boolean nextCapteur()
 	{
+		stop();
 		if (idCapteurCourant + 1 < capteurs.size())
 		{
 			setIdCapteurCourant(idCapteurCourant + 1);
@@ -112,6 +113,7 @@ public class CapteurManager implements SensorEventListener
 			{
 				return nextCapteur();
 			}
+			start();
 			return true;
 		}
 		else
@@ -149,6 +151,8 @@ public class CapteurManager implements SensorEventListener
 		{
 			// activity.newMax(delaisCapteursMax.get(idCapteurCourant));
 		}
+		setIdCapteurCourant(0);
+		//TODO : et si 0 n'est pas utilisé ?
 		start();
 	}
 
@@ -194,7 +198,7 @@ public class CapteurManager implements SensorEventListener
 
 	private void start()
 	{
-		setIdCapteurCourant(0);
+
 		// fichier.openFile();
 		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
 	}

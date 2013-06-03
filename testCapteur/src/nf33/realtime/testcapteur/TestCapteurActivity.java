@@ -45,6 +45,11 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
 		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(0));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(1));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(3));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(4));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(5));
 		
 		rtdroid.declare(programmeUtilisateur, listeCapteur, 0l);
 		
@@ -67,19 +72,22 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 	public void onClick(View v)
 	{
 		//capteurManager.testAuto();
-		if (isStarted == false)
+		if (isStarted)
 		{
-			isStarted = true;
+			isStarted = rtdroid.stop();
+		}
+		else
+		{
+			isStarted = rtdroid.launch();
+		}
+		
+		if (isStarted)
+		{
 			b.setText(R.string.boutonStop);
-			rtdroid.launch();
-			
-			
 		}
 		else
 		{
 			b.setText(R.string.boutonStart);
-			rtdroid.stop();
-			isStarted = false;
 		}
 		
 

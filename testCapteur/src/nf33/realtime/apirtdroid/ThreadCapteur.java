@@ -37,25 +37,26 @@ public class ThreadCapteur extends Thread
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					break;
 				}
 			}
 		}
 		while (capteurManager.nextCapteur());
-		capteurManager.stopMesure();
+//		capteurManager.stopMesure();
 		Long max = capteurManager.getPeriodeMax();
 		if (periodeDemande >=  max)
 		{
-			rtdroid.enConfiguration(true, periodeDemande);
+			rtdroid.endConfiguration(true, periodeDemande);
 			programmeUtilisateur.endConfiguration(true, periodeDemande);
 		}
 		else if (periodeDemande == 0)
 		{
-			rtdroid.enConfiguration(true, max);
+			rtdroid.endConfiguration(true, max);
 			programmeUtilisateur.endConfiguration(true, max);
 		}
 		else
 		{
-			rtdroid.enConfiguration(true, 0l);
+			rtdroid.endConfiguration(true, 0l);
 			programmeUtilisateur.endConfiguration(false, 0l);
 		}
 	}

@@ -108,7 +108,7 @@ public final class RTDroid
 		return this.capteurManager;
 	}
 	
-	public void enConfiguration(Boolean isPossible, Long periode)
+	public void endConfiguration(Boolean isPossible, Long periode)
 	{
 		mutexConfigurationEnCours.lock();
 		configurationEnCours--;
@@ -117,5 +117,7 @@ public final class RTDroid
 		Log.d("DADU", "valeur de la période : " + (periode));
 		maxDurationCapteur = periode;
 	}
+	
+	
 	
 }
