@@ -30,6 +30,7 @@ public class RTMainThread extends Thread
 		this._runnable = _runnable;
 		_logActived = false;
 		_nanoAccuracy = true;
+		_log = null;
 	}
 
 	public RTMainThread(RTRunnable _runnable, boolean activelog)
@@ -41,6 +42,10 @@ public class RTMainThread extends Thread
 		if(_logActived)
 		{
 			_log = new Logs();
+		}
+		else
+		{
+			_log = null;
 		}
 	}
 
@@ -84,8 +89,9 @@ public class RTMainThread extends Thread
 				{
 					_log.threaded_write("End execution, "+  System.nanoTime());
 					_log.affiche_log("End execution"+  System.nanoTime());
+					_log.closeLog();
 				}
-				_log.closeLog();
+				
 				break; //stop the Thread
 			}
 			
@@ -142,8 +148,9 @@ public class RTMainThread extends Thread
 				{
 					_log.threaded_write("End execution"+  System.nanoTime());
 					_log.threaded_write("End execution"+  System.nanoTime());
+					_log.closeLog();
 				}
-				_log.closeLog();
+				
 				
 				break; //stop the thread
 			}
@@ -194,6 +201,11 @@ public class RTMainThread extends Thread
 		if(_logActived)
 		{
 			_log = new Logs();
+		}
+		else if(_log != null)
+		{
+			_log.closeLog();
+			_log = null;
 		}
 	}
 	
