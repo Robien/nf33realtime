@@ -29,6 +29,7 @@ public class RTMainThread extends Thread
 		super();
 		this._runnable = _runnable;
 		_logActived = false;
+		_nanoAccuracy = true;
 	}
 
 	public RTMainThread(RTRunnable _runnable, boolean activelog)
@@ -36,6 +37,7 @@ public class RTMainThread extends Thread
 		super();
 		this._runnable = _runnable;
 		_logActived = activelog;
+		_nanoAccuracy = true;
 		if(_logActived)
 		{
 			_log = new Logs();
