@@ -44,20 +44,34 @@ public class ThreadCapteur extends Thread
 		while (capteurManager.nextCapteur());
 //		capteurManager.stopMesure();
 		Long max = capteurManager.getPeriodeMax();
-		if (periodeDemande >=  max)
+		
+		Log.d("DADU", "Début du calcul du WCET");
+		Long total = 0l;
+		for (int i = 0; i < 100; ++i)
 		{
-			rtdroid.endConfiguration(true, periodeDemande);
-			programmeUtilisateur.endConfiguration(true, periodeDemande);
+			Long debut =  System.nanoTime();
+			programmeUtilisateur.periodicEvent(0);
+			Long tmp = System.nanoTime() - debut;
+			if (total < tmp)
+			{
+				total = tmp;
+			}
+		}
+		Log.d("DADU", periodeDemande + " - " + max + " - " + total + " -> " + (max + total));
+		if (periodeDemande >=  max + total)
+		{
+			rtdroid.endConfiguration(true, periodeDemande, total);
+			programmeUtilisateur.endConfiguration(true, periodeDemande, total);
 		}
 		else if (periodeDemande == 0)
 		{
-			rtdroid.endConfiguration(true, max);
-			programmeUtilisateur.endConfiguration(true, max);
+			rtdroid.endConfiguration(true, max + total, total);
+			programmeUtilisateur.endConfiguration(true, max + total, total);
 		}
 		else
 		{
-			rtdroid.endConfiguration(false, 0l);
-			programmeUtilisateur.endConfiguration(false, 0l);
+			rtdroid.endConfiguration(false, 0l, total);
+			programmeUtilisateur.endConfiguration(false, 0l, total);
 		}
 	}
 }

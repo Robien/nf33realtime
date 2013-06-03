@@ -11,6 +11,6 @@ public interface RTRunnable
 {
 	
 	public abstract void periodicEvent(long timeSinceLast);
-	public abstract void endConfiguration(Boolean isRunable, Long frequence);
+	public abstract void endConfiguration(Boolean isRunable, Long frequence, Long wcet);
 
 }

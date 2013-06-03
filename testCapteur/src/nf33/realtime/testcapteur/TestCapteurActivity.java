@@ -44,7 +44,12 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(0));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(1));
 		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(3));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(4));
+		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(5));
 		
 		rtdroid.declare(programmeUtilisateur, listeCapteur, 1000000000l);
 		

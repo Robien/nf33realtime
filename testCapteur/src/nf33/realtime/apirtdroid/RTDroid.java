@@ -83,7 +83,7 @@ public final class RTDroid
 		mutexConfigurationEnCours.unlock();
 		
 		 // creation du thread principal RTMainThread
-		_threadPrincipal = new RTMainThread(runnable, true);
+		_threadPrincipal = new RTMainThread(runnable);
 		 // configuration du temps de capteur max
 		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteurEtExe - maxDurationExecution);
 		 // configuration du temps de exe max
@@ -108,7 +108,7 @@ public final class RTDroid
 		return this.capteurManager;
 	}
 	
-	public void endConfiguration(Boolean isPossible, Long periode)
+	public void endConfiguration(Boolean isPossible, Long periode, Long wcet)
 	{
 		mutexConfigurationEnCours.lock();
 		configurationEnCours--;
@@ -116,6 +116,8 @@ public final class RTDroid
 		this.isPossible = isPossible;
 		Log.d("DADU", "valeur de la période : " + (periode));
 		maxDurationCapteurEtExe = periode;
+		maxDurationExecution = wcet;
+		Log.d("DADU", "WCET = " + wcet);
 	}
 	
 	

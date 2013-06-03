@@ -4,6 +4,7 @@
 package nf33.realtime.apirtdroid;
 
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.util.Log;
 
 /**
@@ -18,6 +19,7 @@ public class Capteur
 	private boolean isUsed;
 	private Long maxPeriod;
 	private String name;
+	private SensorEvent lastSensorEvent;
 
 	public Capteur(int id, Sensor sensor, Boolean isUsed)
 	{
@@ -87,5 +89,13 @@ public class Capteur
 		return name;
 	}
 	
+	public SensorEvent getLastSensorEvent()
+	{
+		return lastSensorEvent;
+	}
 
+	public void setLastSensorEvent(SensorEvent lastSensorEvent)
+	{
+		this.lastSensorEvent = lastSensorEvent;
+	}
 }

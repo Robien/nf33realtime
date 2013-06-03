@@ -38,9 +38,11 @@ public class CapteurManager implements SensorEventListener
 	private int idCapteurCourant = 0;
 
 	private Fichier fichier;
+	private Boolean isTestingMaxPeriod;
 
 	public CapteurManager(Activity activity)
 	{
+		isTestingMaxPeriod = true;
 		this.activity = activity;
 
 		fichier = new Fichier("maxSauv.dat", false);
@@ -155,6 +157,23 @@ public class CapteurManager implements SensorEventListener
 		//TODO : et si 0 n'est pas utilisé ?
 		start();
 	}
+	public void startCaptureCapteur()
+	{
+		isTestingMaxPeriod = false;
+		for (Capteur capteur : capteurs)
+		{
+			sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
+		}
+	}
+	
+	public void stopCapteurCapteur()
+	{
+		for (Capteur capteur : capteurs)
+		{
+			sensorManager.unregisterListener(this, capteur.getSensor());
+		}
+		isTestingMaxPeriod = true;
+	}
 
 	public void stopMesure()
 	{
@@ -181,17 +200,30 @@ public class CapteurManager implements SensorEventListener
 	@Override
 	public void onSensorChanged(SensorEvent event)
 	{
-
 		long delais = event.timestamp - lastTimestamp;
 		lastTimestamp = event.timestamp;
 		delaisCapteurs.get(idCapteurCourant).add(delais);
-		if (delais > delaisCapteursMax.get(idCapteurCourant))
+
+		if (isTestingMaxPeriod)
 		{
-			delaisCapteursMax.set(idCapteurCourant, delais);
-			capteurCourant.setMaxPeriode(delais);
-			// activity.newMax(delais);
+			if (delais > delaisCapteursMax.get(idCapteurCourant))
+			{
+				delaisCapteursMax.set(idCapteurCourant, delais);
+				capteurCourant.setMaxPeriode(delais);
+				// activity.newMax(delais);
+			}
+			Log.d("MESURE", delais + "");
 		}
-		Log.d("MESURE", delais + "");
+		else
+		{
+			for (Capteur capteur : capteurs)
+			{
+				if (event.sensor == capteur.getSensor())
+				{
+					capteur.setLastSensorEvent(event);
+				}
+			}
+		}
 		// String chaine = new String("delais : " + delais + "ns");
 		// fichier.write(chaine);
 	}
@@ -210,35 +242,6 @@ public class CapteurManager implements SensorEventListener
 		// fichier.close();
 	}
 
-	public void testAuto()
-	{
-		setIdCapteurCourant(0);
-		for (int i = 10;; i = i * 2)
-		{
-			while (nextCapteur())
-			{
-				if (activity != null)
-				{
-					// activity.newMax(delaisCapteursMax.get(idCapteurCourant));
-				}
-
-				for (int j = 0; j < 1000000; ++j)
-				{
-
-				}
-
-				// try
-				// {
-				// Thread.sleep(i);
-				// }
-				// catch (InterruptedException e)
-				// {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-			}
-		}
-	}
 
 	public SensorManager getSensorManager()
 	{

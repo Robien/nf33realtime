@@ -18,7 +18,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 
 
 	@Override
-	public void endConfiguration(Boolean isRunable, Long frequence)
+	public void endConfiguration(Boolean isRunable, Long frequence, Long wcet)
 	{
 		// TODO Auto-generated method stub
 		
@@ -31,6 +31,15 @@ public class ProgrammeUtilisateur implements RTRunnable
 	public void periodicEvent(long timeSinceLast)
 	{
 		// TODO Auto-generated method stub
+		try
+		{
+			Thread.sleep((long) (Math.random()*90), 0);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
