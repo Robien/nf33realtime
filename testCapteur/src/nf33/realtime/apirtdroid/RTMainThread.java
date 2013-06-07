@@ -65,7 +65,6 @@ public class RTMainThread extends Thread
 		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		
 		
-		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 
 		if(_logActived)
 		{
@@ -82,6 +81,8 @@ public class RTMainThread extends Thread
 		}
 		
 		_capteurManager.startCaptureCapteur();
+		
+		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
 		
 		//debut de l'execution du code utulisateur
 		while(true)
@@ -250,4 +251,109 @@ public class RTMainThread extends Thread
 		this._nanoAccuracy = nanoAccuracy;
 	}
 	
+	//Simulation du code API, retourne le temps necessaire
+	public long voidRun()
+	{
+		long beginTimeExe = 0; 								//stock le temps du début de l'execution  (en nano)
+		long endTimeExe = 0;								//stock le temps de la fin de l'execution  (en nano)
+		long gettime = 0;									//stock le temps de recuperation des capteurs  (en nano)
+		long needSleep =0; 									//temps de sleep  (en milli)
+		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
+		
+		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
+		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
+		
+		for (Capteur capteur : capteurUtilise)
+		{
+			capteursValues.add(new CapteurValue());
+		}
+		
+		_capteurManager.startCaptureCapteur();
+		try
+		{
+			Thread.sleep(toMilli(_maxDurationCap));
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //attend qu'il y ai au moins une valeur
+		
+		//recupere temps de début de la fonction à simuler
+		beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
+		
+		//Simulation  d'execution
+		if(true)
+		{
+			
+			if(_nanoAccuracy)
+			{
+				toMilli(_maxDurationCap);
+				remainderNano(_maxDurationCap);
+			}
+			else
+			{
+				toMilli(_maxDurationCap);
+			}
+
+			gettime = System.nanoTime(); 					//recupere le temps en nanoseconde
+			if(_logActived)
+			{
+				_log.threaded_write("Calculfonc - Date capteur : " +timeToString(gettime) );
+				_log.affiche_log("Calculfonc - Date capteur : " +timeToString(gettime) );
+			}
+			//Simulation  : recuperation des données capteurs
+			for (int i = 0; i < capteurUtilise.size(); i++)
+			{
+				if (capteurUtilise.get(i).getLastSensorEvent() == null)
+				{
+					Log.d("DADU", "Calculfonc - 4.5 : " + i + " DONNE NON TROUVE !");
+				}
+				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
+				capteursValues.get(i).setTimestampCaptureApi(gettime);
+				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+			}
+			
+			gettime = System.nanoTime(); 				//recupere le temps en nanoseconde
+			thisPeriode = gettime - beginTimeExe; 			//calcul de la periode exacte 
+			if(_logActived)
+			{
+				_log.threaded_write("Calculfonc - Periode : " +timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.affiche_log("Calculfonc - Periode : " +timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+			}
+			
+				
+			endTimeExe = System.nanoTime();					//Simulation  : recupere le temps en nanoseconde de la fin de lexecution
+			
+
+			needSleep = _maxDurationExe-(endTimeExe - gettime) ; //Simulation  : calcul du temps de sleep necessaire pour compenser le gigue
+			if(needSleep<0)//Simulation  : erreur, execution plus long que prévu
+			{
+				if(_logActived)
+				{
+					
+					_log.threaded_write("Calculfonc - Erreur, execution plus long que prévu : " + timeToString(endTimeExe - gettime));
+					_log.affiche_log("Calculfonc - Erreur, execution plus long que prévu" + timeToString(endTimeExe - gettime));
+				}
+				needSleep = 0;
+			}
+			
+			//Simulation  : Attente de la fin de la periode d'execution
+
+				if(_nanoAccuracy)
+				{
+					toMilli(needSleep);
+					remainderNano(needSleep);
+				}
+				else
+				{
+					toMilli(needSleep);
+				}
+
+		}
+		//recuperation du temps de la fin de la fonction a simuler
+		endTimeExe = System.nanoTime();
+		_capteurManager.stopCapteurCapteur();
+		return endTimeExe-beginTimeExe;
+	}
 }
