@@ -3,6 +3,7 @@ package nf33.realtime.apirtdroid;
 import java.util.ArrayList;
 
 import android.util.Log;
+import nf33.realtime.apirtdroid.Tools;
 
 /**
  * @author Seg_fault_
@@ -10,8 +11,7 @@ import android.util.Log;
  */
 public class RTMainThread extends Thread
 {
-	//Conversion de Nanoseconde a Milliseconde
-	static final float convertNanoToMilli = 1000000;
+
 	
 	//durée maximal de recuperation des capteurs (en nano)
 	private long _maxDurationCap;
@@ -92,11 +92,11 @@ public class RTMainThread extends Thread
 			{
 				if(_nanoAccuracy)
 				{
-					Thread.sleep(toMilli(_maxDurationCap),remainderNano(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
+					Thread.sleep(Tools.toMilli(_maxDurationCap),Tools.remainderNano(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
 				}
 				else
 				{
-					Thread.sleep(toMilli(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
+					Thread.sleep(Tools.toMilli(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
 				}
 			}
 			catch (InterruptedException e)
@@ -115,8 +115,8 @@ public class RTMainThread extends Thread
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
 			if(_logActived)
 			{
-				_log.threaded_write("Date capteur : " +timeToString(dateCap) );
-				_log.affiche_log("Date capteur : " +timeToString(dateCap) );
+				_log.threaded_write("Date capteur : " +Tools.timeToString(dateCap) );
+				_log.affiche_log("Date capteur : " +Tools.timeToString(dateCap) );
 			}
 			//recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
@@ -135,8 +135,8 @@ public class RTMainThread extends Thread
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
 			{
-				_log.threaded_write("Periode : " +timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
-				_log.affiche_log("Periode : " +timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.threaded_write("Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.affiche_log("Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
 			}
 			
 			//Appel de la methode à executer 
@@ -149,8 +149,8 @@ public class RTMainThread extends Thread
 			{
 				if(_logActived)
 				{
-					_log.threaded_write("Erreur, execution plus long que prévu : " + timeToString(endTimeExe - beginTimeExe));
-					_log.affiche_log("Erreur, execution plus long que prévu" + timeToString(endTimeExe - beginTimeExe));
+					_log.threaded_write("Erreur, execution plus long que prévu : " + Tools.timeToString(endTimeExe - beginTimeExe));
+					_log.affiche_log("Erreur, execution plus long que prévu" + Tools.timeToString(endTimeExe - beginTimeExe));
 				}
 				needSleep = 0;
 			}
@@ -160,11 +160,11 @@ public class RTMainThread extends Thread
 			{
 				if(_nanoAccuracy)
 				{
-					Thread.sleep(toMilli(needSleep),remainderNano(needSleep));	//attend la fin de la fenetre de capture des données capteurs
+					Thread.sleep(Tools.toMilli(needSleep),Tools.remainderNano(needSleep));	//attend la fin de la fenetre de capture des données capteurs
 				}
 				else
 				{
-					Thread.sleep(toMilli(needSleep));					//attend jusqu'a la fin de la durée max d'exe
+					Thread.sleep(Tools.toMilli(needSleep));					//attend jusqu'a la fin de la durée max d'exe
 				}
 				
 			}
@@ -206,21 +206,8 @@ public class RTMainThread extends Thread
 		this._maxDurationExe = _maxDurationExe;
 	}
 	
-	static private long toMilli(long nano)
-	{
-		return (long)(nano/convertNanoToMilli);
-	}
+
 	
-	//donne le reste de nanosecond sans les milli
-	static private int remainderNano(long nano)
-	{
-		return (int)(nano%convertNanoToMilli);
-	}
-	
-	static private String timeToString(long nano)
-	{
-		return "(" + toMilli(nano) + "ms" + remainderNano(nano) + "ns)";
-	}
 	
 	public synchronized void set_logActived(boolean activelog)
 	{
@@ -271,7 +258,7 @@ public class RTMainThread extends Thread
 		_capteurManager.startCaptureCapteur();
 		try
 		{
-			Thread.sleep(toMilli(_maxDurationCap));
+			Thread.sleep(Tools.toMilli(_maxDurationCap));
 		}
 		catch (InterruptedException e)
 		{
@@ -288,19 +275,19 @@ public class RTMainThread extends Thread
 			
 			if(_nanoAccuracy)
 			{
-				toMilli(_maxDurationCap);
-				remainderNano(_maxDurationCap);
+				Tools.toMilli(_maxDurationCap);
+				Tools.remainderNano(_maxDurationCap);
 			}
 			else
 			{
-				toMilli(_maxDurationCap);
+				Tools.toMilli(_maxDurationCap);
 			}
 
 			gettime = System.nanoTime(); 					//recupere le temps en nanoseconde
 			if(_logActived)
 			{
-				_log.threaded_write("Calculfonc - Date capteur : " +timeToString(gettime) );
-				_log.affiche_log("Calculfonc - Date capteur : " +timeToString(gettime) );
+				_log.threaded_write("Calculfonc - Date capteur : " +Tools.timeToString(gettime) );
+				_log.affiche_log("Calculfonc - Date capteur : " +Tools.timeToString(gettime) );
 			}
 			//Simulation  : recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
@@ -318,8 +305,8 @@ public class RTMainThread extends Thread
 			thisPeriode = gettime - beginTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
 			{
-				_log.threaded_write("Calculfonc - Periode : " +timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
-				_log.affiche_log("Calculfonc - Periode : " +timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.threaded_write("Calculfonc - Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.affiche_log("Calculfonc - Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
 			}
 			
 				
@@ -332,8 +319,8 @@ public class RTMainThread extends Thread
 				if(_logActived)
 				{
 					
-					_log.threaded_write("Calculfonc - Erreur, execution plus long que prévu : " + timeToString(endTimeExe - gettime));
-					_log.affiche_log("Calculfonc - Erreur, execution plus long que prévu" + timeToString(endTimeExe - gettime));
+					_log.threaded_write("Calculfonc - Erreur, execution plus long que prévu : " + Tools.timeToString(endTimeExe - gettime));
+					_log.affiche_log("Calculfonc - Erreur, execution plus long que prévu" + Tools.timeToString(endTimeExe - gettime));
 				}
 				needSleep = 0;
 			}
@@ -342,12 +329,12 @@ public class RTMainThread extends Thread
 
 				if(_nanoAccuracy)
 				{
-					toMilli(needSleep);
-					remainderNano(needSleep);
+					Tools.toMilli(needSleep);
+					Tools.remainderNano(needSleep);
 				}
 				else
 				{
-					toMilli(needSleep);
+					Tools.toMilli(needSleep);
 				}
 
 		}
