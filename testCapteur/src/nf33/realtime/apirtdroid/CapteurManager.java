@@ -67,6 +67,7 @@ public class CapteurManager implements SensorEventListener
 			capteurs.add(capteurTmp);
 			capteurTmp.setName(sensor.getName());
 			listeCapteursTexte += sensor.getName() + "\n";
+			Log.d("CAPTEURS", sensor.getType() +  "");
 			delaisCapteurs.add(new ArrayList<Long>());
 			if (getFromSauv && fichier.read().equals(sensor.getName()))
 			{

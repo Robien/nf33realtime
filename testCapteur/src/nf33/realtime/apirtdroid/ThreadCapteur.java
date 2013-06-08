@@ -57,7 +57,22 @@ public class ThreadCapteur extends Thread
 				total = tmp;
 			}
 		}
-		Log.d("DADU", periodeDemande + " - " + max + " - " + total + " -> " + (max + total));
+		Long wcetAPI = 0l;
+		DummyRunnable dummy = new DummyRunnable();
+		RTMainThread mainThread = new RTMainThread(dummy, capteurManager, true);
+		for (int i = 0; i < 100; ++i)
+		{
+			Long tmp = mainThread.voidRun();
+			if (wcetAPI < tmp)
+			{
+				wcetAPI = tmp;
+			}
+		}
+		
+		Log.d("DADU", "WCET API : " + wcetAPI);
+		total += wcetAPI;
+		
+		Log.d("DADU", "periode demandé : " + periodeDemande + " max capteur : " + max + " wcet total " + total + " wcet + capteurs " + (max + total));
 		if (periodeDemande >=  max + total)
 		{
 			rtdroid.endConfiguration(true, periodeDemande, total);
