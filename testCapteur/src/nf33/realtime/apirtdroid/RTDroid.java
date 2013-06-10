@@ -57,6 +57,10 @@ public final class RTDroid
 //		{
 //			capteursUtilise.add(capteur);
 //		}
+		for (Capteur capteur : capteurManager.getListeCapteurs())
+		{
+			capteur.setIsUsed(false);
+		}		
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
