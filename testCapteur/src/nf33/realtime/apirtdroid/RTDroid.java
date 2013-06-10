@@ -65,7 +65,7 @@ public final class RTDroid
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
-			Log.d("DADU", "boucle capteur : " + capteur.getSensor().getType());
+			Log.d("DADU", "boucle capteur : " + capteur.getSensor().getType() + " id : " + capteur.getId());
 		}
 		
 		mutexConfigurationEnCours = new ReentrantLock();
