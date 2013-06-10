@@ -49,7 +49,7 @@ public class ThreadCapteur extends Thread
 		
 		Log.d("DADU", "Début du calcul du WCET");
 		Long total = 0l;
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
 			Long debut =  System.nanoTime();
 			programmeUtilisateur.periodicEvent(0, null);
@@ -60,7 +60,7 @@ public class ThreadCapteur extends Thread
 			}
 		}
 		Long wcetAPI = 0l;
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
 			Long tmp = mainThread.voidRun();
 			if (wcetAPI < tmp)
