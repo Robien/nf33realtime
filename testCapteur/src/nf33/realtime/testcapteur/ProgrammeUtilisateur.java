@@ -16,16 +16,20 @@ public class ProgrammeUtilisateur implements RTRunnable
 	private Handler mHandler;
 	private RTDroid rtdroid;
 	
+	public static final int MESSAGE_RECORD = 2;
+	public static final int MESSAGE_PERIODE = 1;
+	public static final int MESSAGE_FINCONFIG = 0;
+	
 	//vitesse minimun pour détecter un shake
-	private static final int FORCE_THRESHOLD = 350;
+	private static final int FORCE_THRESHOLD = 20;//350;
 	// temps minimun pour commencer a détecter la position du téléphone
-	private static final int TIME_THRESHOLD = 100;
+	private static final long TIME_THRESHOLD =100000000l;
 	// temps minimun entre 2 position pour être considérer comme un shaker
-	private static final int SHAKE_TIMEOUT = 500;
+	private static final long SHAKE_TIMEOUT = 5000000000l;
 	// temps entre un 2 shake pour incrementer le nombre de shake
-	private static final int SHAKE_DURATION = 1000;
+	private static final long SHAKE_DURATION = 1000000000l;
 	// nombre de shake pour lancer une action
-	private static final int SHAKE_COUNT = 3;
+	private static final int SHAKE_COUNT = 1;
 	
 	private SensorManager mSensorMgr;
 	private float mLastX=-1.0f, mLastY=-1.0f, mLastZ=-1.0f;
@@ -48,7 +52,11 @@ public class ProgrammeUtilisateur implements RTRunnable
 	@Override
 	public void endConfiguration(Boolean isRunable, Long frequence, Long wcet)
 	{
-		// TODO Auto-generated method stub
+
+		Message msg = mHandler.obtainMessage();
+		msg.obj = new String("Configuration terminée\nfrequence : "+frequence+ "\nwcet : "+ wcet);
+		msg.arg2 = MESSAGE_FINCONFIG;
+        mHandler.sendMessage(msg);
 		
 	}
 
@@ -93,7 +101,8 @@ public class ProgrammeUtilisateur implements RTRunnable
 		
 		/***************Programme utilisateur***********************/
 		Message msg = mHandler.obtainMessage();
-		msg.obj = new String("période : ");
+		msg.arg2 = MESSAGE_PERIODE;
+		msg.obj = new String("Période : ");
 		msg.arg1 = (int)(timeSinceLast);
         mHandler.sendMessage(msg);
 		if (capteursValues != null)
@@ -102,7 +111,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 			{
 				//si le l'un des capteur est un accelerometre
 				if (capteursValues.get(i).getType() == SensorManager.SENSOR_ACCELEROMETER)
-				{
+				{ 
 					// le temps date de la capture
 					long now = capteursValues.get(i).getTimestampCaptureApi();
 
@@ -134,6 +143,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 								msg = mHandler.obtainMessage();
 								msg.obj = new String("!! Grosse Secousse !!\n");
 								msg.arg1 = (int)(speed*1000);
+								msg.arg2 = MESSAGE_RECORD;
 					            mHandler.sendMessage(msg);
 					               
 								mLastShake = now;

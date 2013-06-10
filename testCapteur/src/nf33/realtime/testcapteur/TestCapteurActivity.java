@@ -29,27 +29,36 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 	private ProgrammeUtilisateur programmeUtilisateur;
 	private RTDroid rtdroid;
 	
+
+	
 	  // Gère les communications avec le thread de utilisateur
-	  final private Handler mHandler = new Handler(){
-	    @Override
-	    public void handleMessage(Message msg) {
-	      super.handleMessage(msg);
-	      String message = (String)msg.obj;
-	      if(message.contains("période"))
-	      {
-	    	  texteinfogeneral.setText(message + msg.arg1 );
-	      }
-	      else
-	      {
-	    	  texte.setText(message + msg.arg1);
-	    	  if(record< msg.arg1)
-	    	  {
-	    		  record = msg.arg1;
-	    		  texterecord.setText("record : " + record);
-	    	  }
-	      }
-	    }
-	  };
+	final private Handler mHandler = new Handler()
+	{
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+			String message = (String) msg.obj;
+			switch (msg.arg2)
+			{
+			case ProgrammeUtilisateur.MESSAGE_PERIODE:
+				texteinfogeneral.setText(message + msg.arg1);
+				break;
+			case ProgrammeUtilisateur.MESSAGE_RECORD:
+				texte.setText(message + msg.arg1);
+				if (record < msg.arg1)
+				{
+					record = msg.arg1;
+					texterecord.setText("record : " + record);
+				}
+				break;
+			case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
+				b.setEnabled(true);
+				texteinfogeneral.setText(message);
+				break;
+			}
+		}
+	};
 	
 
 	/** Called when the activity is first created. */
@@ -68,33 +77,33 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		
 		texte = (TextView)findViewById(R.id.infocapteurs);
 		texteinfogeneral = (TextView)findViewById(R.id.info);
+		
 		texterecord = (TextView)findViewById(R.id.record);
 		b.setOnClickListener(this);
+		b.setEnabled(false);
+		texteinfogeneral.setText("Configuration...");
 		rtdroid = new RTDroid(this);
 		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid, mHandler);
 		
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
 		int i = 0;
-		while(i < rtdroid.getCapteurManager().getListeCapteurs().size() && rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() != SensorManager.SENSOR_ACCELEROMETER)
+		while(i < rtdroid.getCapteurManager().getListeCapteurs().size() )
 		{
+			if(rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() == SensorManager.SENSOR_ACCELEROMETER)
+			{
+				Log.d("DADU", "Capteur choisie : ("+ rtdroid.getCapteurManager().getListeCapteurs().get(i).getName() + ") : " + rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType());
+				// ajoute le capteur
+				listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(i));
+			}
 			++i;
 		}
-		if (i < rtdroid.getCapteurManager().getListeCapteurs().size())
-		{
-			// ajoute le capteur
-			listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(i));
-			Log.d("DADU", "Capteur choisie ("+ SensorManager.SENSOR_ACCELEROMETER+") : "+rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType());
-		}
-		else
-		{
-			Log.d("DADU", "Aucun accelerometre trouvé !!");
-			// ajoute le capteur
-			listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
-		}
+		
+			
+
 		
 		Log.d("DADU", "size liste capteur coté activity " + listeCapteur.size());
-		rtdroid.declare(programmeUtilisateur, listeCapteur, 1000000000l);
+		rtdroid.declare(programmeUtilisateur, listeCapteur, 0l);
 		
 
 	}
@@ -122,6 +131,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		else
 		{
 			isStarted = rtdroid.launch();
+			texteinfogeneral.setText("");
 		}
 		
 		if (isStarted)
@@ -136,6 +146,15 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		if (isStarted)
+		{
+			isStarted = rtdroid.stop();
+		}
+	}
 
 	public Resources getActivityResources()
 	{

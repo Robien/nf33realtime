@@ -20,25 +20,17 @@ public final class Tools
 	public static final int WAIT_ACTIVE = 2;
 	public static int type_wait = WAIT_NANO;
 	
+	
 	//endore le thead pendant x nanoseconde
 	static public void nanoWait(long nanos) throws InterruptedException
 	{
-		try
-		{
+		
 				Thread.sleep(toMilli(nanos),remainderNano(nanos));	//attend la fin de la fenetre de capture des données capteurs
-			
-		}
-		catch (InterruptedException e)
-		{
-			throw(e);
-		}
 	}
 	
 	//endore le thead pendant x nanoseconde
 	static public void waitTime(long nanos) throws InterruptedException
 	{
-		try
-		{
 			switch(type_wait)
 			{
 			case WAIT_MILLI:
@@ -55,12 +47,6 @@ public final class Tools
 				Thread.sleep(toMilli(nanos),remainderNano(nanos));	
 				break;
 			}
-	
-		}
-		catch (InterruptedException e)
-		{
-			throw(e);
-		}
 	}
 	
 	

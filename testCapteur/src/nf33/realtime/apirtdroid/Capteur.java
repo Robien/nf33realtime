@@ -62,7 +62,6 @@ public class Capteur
 
 	public void setIsUsed(Boolean isUsed)
 	{
-		Log.d("DADU", id + " isUsed");
 		this.isUsed = isUsed;
 	}
 

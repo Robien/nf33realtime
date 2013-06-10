@@ -23,8 +23,7 @@ public class RTMainThread extends Thread
 	private boolean _logActived;
 	//sauvegarde des log activé
 	private Logs _log;
-	//type de precision
-	private boolean _nanoAccuracy;
+
 	
 	private CapteurManager _capteurManager;
 		
@@ -33,7 +32,7 @@ public class RTMainThread extends Thread
 		super();
 		this._runnable = _runnable;
 		_logActived = false;
-		_nanoAccuracy = true;
+
 		_log = null;
 		_capteurManager = capteurManager;
 	}
@@ -43,7 +42,7 @@ public class RTMainThread extends Thread
 		super();
 		this._runnable = _runnable;
 		_logActived = activelog;
-		_nanoAccuracy = true;
+
 		if(_logActived)
 		{
 			_log = new Logs();
@@ -68,8 +67,8 @@ public class RTMainThread extends Thread
 
 		if(_logActived)
 		{
-			_log.threaded_write("Debut initialisation : " + endTimeExe + " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + _nanoAccuracy);
-			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + _nanoAccuracy);
+			_log.threaded_write("Debut initialisation : " + endTimeExe + " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + Tools.type_wait);
+			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + Tools.type_wait);
 		}
 		
 		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
@@ -163,8 +162,6 @@ public class RTMainThread extends Thread
 					_log.threaded_write("End execution"+  System.nanoTime());
 					_log.closeLog();
 				}
-				
-				
 				break; //stop the thread
 			}
 		
@@ -215,15 +212,7 @@ public class RTMainThread extends Thread
 		return _logActived;
 	}
 
-	public boolean is_nanoAccuracy()
-	{
-		return _nanoAccuracy;
-	}
 
-	public synchronized void set_nanoAccuracy(boolean nanoAccuracy)
-	{
-		this._nanoAccuracy = nanoAccuracy;
-	}
 	
 	//Simulation du code API, retourne le temps necessaire
 	public long voidRun()
@@ -249,7 +238,6 @@ public class RTMainThread extends Thread
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			Log.d("DADU", "voidRun Erreur de sleep");
 			e.printStackTrace();
 		} //attend qu'il y ai au moins une valeur
@@ -261,15 +249,11 @@ public class RTMainThread extends Thread
 		if(true)
 		{
 			
-			if(_nanoAccuracy)
-			{
-				Tools.toMilli(_maxDurationCap);
-				Tools.remainderNano(_maxDurationCap);
-			}
-			else
-			{
-				Tools.toMilli(_maxDurationCap);
-			}
+			
+			Tools.toMilli(_maxDurationCap);
+			Tools.remainderNano(_maxDurationCap);
+			
+
 
 			gettime = System.nanoTime(); 					//recupere le temps en nanoseconde
 			if(_logActived)
@@ -316,15 +300,8 @@ public class RTMainThread extends Thread
 			}
 			//Simulation  : Attente de la fin de la periode d'execution
 
-				if(_nanoAccuracy)
-				{
-					Tools.toMilli(needSleep);
-					Tools.remainderNano(needSleep);
-				}
-				else
-				{
-					Tools.toMilli(needSleep);
-				}
+			Tools.toMilli(_maxDurationCap);
+			Tools.remainderNano(_maxDurationCap);
 
 		}
 		//recuperation du temps de la fin de la fonction a simuler

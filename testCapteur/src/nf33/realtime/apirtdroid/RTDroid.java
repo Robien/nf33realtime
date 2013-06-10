@@ -75,6 +75,7 @@ public final class RTDroid
 		mutexConfigurationEnCours.unlock();
 		 // creation du thread principal RTMainThread
 		_threadPrincipal = new RTMainThread(runnable, capteurManager, true);
+		//Tools.type_wait = Tools.WAIT_ACTIVE;
 		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande, _threadPrincipal);
 		threadCapteur.start();
 		return null;
