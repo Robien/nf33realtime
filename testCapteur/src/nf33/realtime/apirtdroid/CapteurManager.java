@@ -163,7 +163,10 @@ public class CapteurManager implements SensorEventListener
 		isTestingMaxPeriod = false;
 		for (Capteur capteur : capteurs)
 		{
-			sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
+			if (capteur.isUsed())
+			{
+				sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
+			}
 		}
 	}
 	
@@ -171,7 +174,10 @@ public class CapteurManager implements SensorEventListener
 	{
 		for (Capteur capteur : capteurs)
 		{
-			sensorManager.unregisterListener(this, capteur.getSensor());
+			if (capteur.isUsed())
+			{
+				sensorManager.unregisterListener(this, capteur.getSensor());
+			}
 		}
 		isTestingMaxPeriod = true;
 	}
