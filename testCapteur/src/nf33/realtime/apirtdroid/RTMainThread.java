@@ -90,14 +90,7 @@ public class RTMainThread extends Thread
 			//Attente de la fin de la periode
 			try
 			{
-				if(_nanoAccuracy)
-				{
-					Thread.sleep(Tools.toMilli(_maxDurationCap),Tools.remainderNano(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
-				}
-				else
-				{
-					Thread.sleep(Tools.toMilli(_maxDurationCap));	//attend la fin de la fenetre de capture des données capteurs
-				}
+				 Tools.waitTime(_maxDurationCap);//attend la fin de la fenetre de capture des données capteurs
 			}
 			catch (InterruptedException e)
 			{
@@ -159,15 +152,7 @@ public class RTMainThread extends Thread
 			//Attente de la fin de la periode d'execution
 			try
 			{
-				if(_nanoAccuracy)
-				{
-					Thread.sleep(Tools.toMilli(needSleep),Tools.remainderNano(needSleep));	//attend la fin de la fenetre de capture des données capteurs
-				}
-				else
-				{
-					Thread.sleep(Tools.toMilli(needSleep));					//attend jusqu'a la fin de la durée max d'exe
-				}
-				
+				 Tools.waitTime(needSleep);
 			}
 			catch (InterruptedException e)
 			{
@@ -259,11 +244,12 @@ public class RTMainThread extends Thread
 		_capteurManager.startCaptureCapteur();
 		try
 		{
-			Thread.sleep(Tools.toMilli(_maxDurationCap));
+			 Tools.waitTime(_maxDurationCap);
 		}
 		catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
+			Log.d("DADU", "voidRun Erreur de sleep");
 			e.printStackTrace();
 		} //attend qu'il y ai au moins une valeur
 		
