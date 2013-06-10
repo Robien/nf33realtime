@@ -22,17 +22,32 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
 	private Button b = null;
 	private TextView texte = null;
+	private TextView texteinfogeneral = null;
+	private TextView texterecord = null;
+	private int record = 0;
 	private Boolean isStarted = false;
 	private ProgrammeUtilisateur programmeUtilisateur;
 	private RTDroid rtdroid;
 	
-	  // Gère les communications avec le thread de téléchargement
+	  // Gère les communications avec le thread de utilisateur
 	  final private Handler mHandler = new Handler(){
 	    @Override
 	    public void handleMessage(Message msg) {
 	      super.handleMessage(msg);
-	      // L'avancement se situe dans msg.arg1
-	      texte.setText((String)msg.obj);
+	      String message = (String)msg.obj;
+	      if(message.contains("période"))
+	      {
+	    	  texteinfogeneral.setText(message + msg.arg1 );
+	      }
+	      else
+	      {
+	    	  texte.setText(message + msg.arg1);
+	    	  if(record< msg.arg1)
+	    	  {
+	    		  record = msg.arg1;
+	    		  texterecord.setText("record : " + record);
+	    	  }
+	      }
 	    }
 	  };
 	
@@ -52,13 +67,15 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		b = (Button) findViewById(R.id.bouton);
 		
 		texte = (TextView)findViewById(R.id.infocapteurs);
-		
+		texteinfogeneral = (TextView)findViewById(R.id.info);
+		texterecord = (TextView)findViewById(R.id.record);
 		b.setOnClickListener(this);
 		rtdroid = new RTDroid(this);
 		programmeUtilisateur = new ProgrammeUtilisateur(rtdroid, mHandler);
 		
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
+		//ajoute le capteur
 		listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
 		
 		rtdroid.declare(programmeUtilisateur, listeCapteur, 1000000000l);

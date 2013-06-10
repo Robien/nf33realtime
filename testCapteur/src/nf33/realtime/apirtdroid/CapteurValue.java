@@ -3,10 +3,12 @@ package nf33.realtime.apirtdroid;
 
 public class CapteurValue
 {
-	long _timestampCaptureAnd; //capture de la valeur par android
-	long _timestampCaptureApi;		//capture de la valeur par l'api
-	float[] _values;
+	private long _timestampCaptureAnd; //capture de la valeur par android
+	private long _timestampCaptureApi;		//capture de la valeur par l'api
+	private float[] _values;
 	private int _id;
+	private int _type;
+	
 	public CapteurValue(int id, long timestampCaptureAnd, float[] values)
 	{
 		super();
@@ -48,6 +50,16 @@ public class CapteurValue
 	public void setValues(float[] values)
 	{
 		this._values = values;
+	}
+
+	public int getType()
+	{
+		return _type;
+	}
+
+	public void setType(int type)
+	{
+		this._type = type;
 	}
 	
 	

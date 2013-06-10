@@ -299,6 +299,7 @@ public class RTMainThread extends Thread
 				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
 				capteursValues.get(i).setTimestampCaptureApi(gettime);
 				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
 			}
 			
 			gettime = System.nanoTime(); 				//recupere le temps en nanoseconde
