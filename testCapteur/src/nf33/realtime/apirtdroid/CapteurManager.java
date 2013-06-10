@@ -289,6 +289,7 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				listCateurs.add(capteur);
+				Log.d("DADU", "getListeCapteurUtilise id :" + capteur.getId());
 			}
 		}
 		return listCateurs;
