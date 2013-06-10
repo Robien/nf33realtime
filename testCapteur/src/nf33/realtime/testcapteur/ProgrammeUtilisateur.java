@@ -110,7 +110,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 			for (int i = 0; i < capteursValues.size(); ++i)
 			{
 				//si le l'un des capteur est un accelerometre
-				if (capteursValues.get(i).getType() == SensorManager.SENSOR_ACCELEROMETER)
+				if (capteursValues.get(i).getType() == 1)
 				{
 					msg = mHandler.obtainMessage();
 					msg.obj = new String("!! Grosse Secousse !!\n");

@@ -28,7 +28,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 	private Boolean isStarted = false;
 	private ProgrammeUtilisateur programmeUtilisateur;
 	private RTDroid rtdroid;
-	
+	private boolean configure = false;
 
 	
 	  // Gère les communications avec le thread de utilisateur
@@ -42,7 +42,10 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 			switch (msg.arg2)
 			{
 			case ProgrammeUtilisateur.MESSAGE_PERIODE:
+				if(configure)
+				{
 				texteinfogeneral.setText(message + msg.arg1);
+				}
 				break;
 			case ProgrammeUtilisateur.MESSAGE_RECORD:
 				texte.setText(message + msg.arg1);
@@ -54,6 +57,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 				break;
 			case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
 				b.setEnabled(true);
+				configure = true;
 				texteinfogeneral.setText(message);
 				break;
 			}
@@ -90,7 +94,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		int i = 0;
 		while(i < rtdroid.getCapteurManager().getListeCapteurs().size() )
 		{
-			if(rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() == SensorManager.SENSOR_ACCELEROMETER)
+			if(rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() == 1)
 			{
 				Log.d("DADU", "Capteur choisie : ("+ rtdroid.getCapteurManager().getListeCapteurs().get(i).getName() + ") : " + rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType());
 				// ajoute le capteur
