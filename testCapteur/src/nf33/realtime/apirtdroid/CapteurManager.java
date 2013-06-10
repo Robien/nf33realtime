@@ -163,7 +163,7 @@ public class CapteurManager implements SensorEventListener
 		isTestingMaxPeriod = false;
 		for (Capteur capteur : capteurs)
 		{
-			sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
+			sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
 		}
 	}
 	
@@ -234,7 +234,7 @@ public class CapteurManager implements SensorEventListener
 	{
 
 		// fichier.openFile();
-		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
 	}
 
 	private void stop()
