@@ -17,6 +17,8 @@ public class RTMainThread extends Thread
 	private long _maxDurationCap;
 	//durée maximal d'execution de la fonction utilisateur  (en nano)
 	private long _maxDurationExe;
+	//frequence attendu
+	private long frequenceAttendu;
 	//Classe de calcul utilisateur à executer
 	private RTRunnable _runnable;
 	//sauvegarde des log activé
@@ -67,8 +69,8 @@ public class RTMainThread extends Thread
 
 		if(_logActived)
 		{
-			_log.threaded_write("Debut initialisation : " + endTimeExe + " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + Tools.type_wait);
-			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " durée max execution : " + _maxDurationExe + "Precision nano : " + Tools.type_wait);
+			_log.threaded_write("Debut initialisation : " + endTimeExe + " durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu + "Precision nano : " + Tools.type_wait);
+			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu + "Precision nano : " + Tools.type_wait);
 		}
 		
 		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
@@ -129,8 +131,8 @@ public class RTMainThread extends Thread
 			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
 			{
-				_log.threaded_write("Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
-				_log.affiche_log("Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
+				_log.threaded_write("Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(frequenceAttendu)));
+				_log.affiche_log("Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(frequenceAttendu)));
 			}
 			
 			//Appel de la methode à executer 
@@ -188,6 +190,10 @@ public class RTMainThread extends Thread
 	public synchronized void set_maxDurationExe(long _maxDurationExe)
 	{
 		this._maxDurationExe = _maxDurationExe;
+	}
+	public synchronized void setFrequenceAttendu(long frequenceAttendu)
+	{
+		this.frequenceAttendu = frequenceAttendu;
 	}
 	
 

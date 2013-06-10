@@ -33,8 +33,11 @@ public final class RTDroid
 	private ThreadCapteur threadCapteur;
 	private RTMainThread _threadPrincipal; //Thread de gestion de l'execution
 
-	private Long maxDurationCapteurEtExe;
-	private Long maxDurationExecution;
+	private Long periode;
+	private  Long wcetAPI;
+	private Long wcetUtilisateur;
+	private Long maxCapteur;
+	
 
 	private Boolean isPossible;
 	
@@ -44,8 +47,6 @@ public final class RTDroid
 		//capteursUtilise = new ArrayList<Capteur>();
 		this.activity = activity;
 		configurationEnCours = 0;
-		maxDurationCapteurEtExe = 0l;
-		maxDurationExecution = 100000000l;
 	}
 
 	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)
@@ -93,9 +94,10 @@ public final class RTDroid
 		mutexConfigurationEnCours.unlock();
 		
 		 // configuration du temps de capteur max
-		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteurEtExe - maxDurationExecution);
+		_threadPrincipal.set_maxDurationCapteur(maxCapteur);
 		 // configuration du temps de exe max
-		_threadPrincipal.set_maxDurationExe(maxDurationExecution);
+		_threadPrincipal.set_maxDurationExe(wcetUtilisateur);
+		_threadPrincipal.setFrequenceAttendu(periode);
 		 // Lancement du thread principal RTMainThread
 		_threadPrincipal.start();
  
@@ -116,16 +118,17 @@ public final class RTDroid
 		return this.capteurManager;
 	}
 	
-	public void endConfiguration(Boolean isPossible, Long periode, Long wcet)
+	public void endConfiguration(Boolean isPossible, Long periode, Long wcetAPI, Long wcetUtilisateur, Long maxCapteur)
 	{
 		mutexConfigurationEnCours.lock();
 		configurationEnCours--;
 		mutexConfigurationEnCours.unlock();
 		this.isPossible = isPossible;
 		Log.d("DADU", "valeur de la période : " + (periode));
-		maxDurationCapteurEtExe = periode;
-		maxDurationExecution = wcet;
-		Log.d("DADU", "WCET = " + wcet);
+		 this.periode = periode;
+		 this.wcetAPI = wcetAPI;
+		 this.wcetUtilisateur = wcetUtilisateur;
+		 this.maxCapteur = maxCapteur;
 	}
 	
 	

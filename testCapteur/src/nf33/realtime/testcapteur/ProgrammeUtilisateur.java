@@ -123,6 +123,14 @@ public class ProgrammeUtilisateur implements RTRunnable
             }
 
         }
+        else
+        {
+            msg = mHandler.obtainMessage();
+            msg.obj = new String("!! Grosse Secousse !!\n");
+            msg.arg1 = (int)(0*1000);
+            msg.arg2 = MESSAGE_RECORD;
+            mHandler.sendMessage(msg);
+        }
 
     }
 

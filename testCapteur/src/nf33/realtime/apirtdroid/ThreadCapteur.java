@@ -59,6 +59,7 @@ public class ThreadCapteur extends Thread
 				total = tmp;
 			}
 		}
+		Long wcetUtilisateur = total;
 		Long wcetAPI = 0l;
 		for (int i = 0; i < 10; ++i)
 		{
@@ -73,19 +74,20 @@ public class ThreadCapteur extends Thread
 		total += wcetAPI;
 		
 		Log.d("DADU", "periode demandé : " + periodeDemande + " max capteur : " + max + " wcet total " + total + " wcet + capteurs " + (max + total));
+		Log.d("DADU", "wcetUtilisateur : " + (total-wcetAPI) + " - " + wcetUtilisateur);
 		if (periodeDemande >=  max + total)
 		{
-			rtdroid.endConfiguration(true, periodeDemande, total);
+			rtdroid.endConfiguration(true, periodeDemande, wcetAPI, periodeDemande-max-wcetAPI, max);
 			programmeUtilisateur.endConfiguration(true, periodeDemande, total);
 		}
 		else if (periodeDemande == 0)
 		{
-			rtdroid.endConfiguration(true, max + total, total);
+			rtdroid.endConfiguration(true, max+total, wcetAPI, total-wcetAPI, max);
 			programmeUtilisateur.endConfiguration(true, max + total, total);
 		}
 		else
 		{
-			rtdroid.endConfiguration(false, 0l, total);
+			rtdroid.endConfiguration(false, 0l, 0l, 0l, 0l);
 			programmeUtilisateur.endConfiguration(false, 0l, total);
 		}
 	}
