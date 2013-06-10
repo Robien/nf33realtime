@@ -166,7 +166,7 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
-				Log.d("DADU", "Register n°" + capteur.getId());
+				Log.d("DADU", "Register n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
 			}
 		}
 	}
@@ -178,7 +178,7 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				sensorManager.unregisterListener(this, capteur.getSensor());
-				Log.d("DADU", "unregister n°" + capteur.getId());
+				Log.d("DADU", "unregister n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
 			}
 		}
 		isTestingMaxPeriod = true;
