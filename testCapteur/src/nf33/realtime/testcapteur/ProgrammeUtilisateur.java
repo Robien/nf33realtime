@@ -111,52 +111,14 @@ public class ProgrammeUtilisateur implements RTRunnable
 			{
 				//si le l'un des capteur est un accelerometre
 				if (capteursValues.get(i).getType() == SensorManager.SENSOR_ACCELEROMETER)
-				{ 
-					// le temps date de la capture
-					long now = capteursValues.get(i).getTimestampCaptureApi();
-
-
-					// si ce temps et le temps de la dernière position est trop
-					// long, supérieur à SHAKE_TIMEOUT on recommence avec mShakeCount = 0;
-					if ((now - mLastForce) > SHAKE_TIMEOUT)
-					{
-						mShakeCount = 0;
-					}
-
-					//difference entre la dernier calcul et maintenant
-					long diff = now - mLastTime;
-					if (diff > TIME_THRESHOLD)
-					{
-						
-						// calcule de la vitesse de shake
-						float speed = Math.abs(capteursValues.get(i).getValues()[SensorManager.DATA_X] 
-								+ capteursValues.get(i).getValues()[SensorManager.DATA_Y] 
-								+ capteursValues.get(i).getValues()[SensorManager.DATA_Z] - mLastX - mLastY - mLastZ) / diff * 10000;
-						// on passe cette étape si notre vitesse est supérieure à notre vitesse minimum FORCE_THRESHOLD
-						if (speed > FORCE_THRESHOLD)
-						{
-							// si nous avons un nombre de shake supérieur à notre nombre minimun SHAKE_COUNT
-							if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION))
-							{
-								
-								// si toutes les conditions sont réunies je previens l'interface
-								msg = mHandler.obtainMessage();
-								msg.obj = new String("!! Grosse Secousse !!\n");
-								msg.arg1 = (int)(speed*1000);
-								msg.arg2 = MESSAGE_RECORD;
-					            mHandler.sendMessage(msg);
-					               
-								mLastShake = now;
-								mShakeCount = 0;			
-							}
-							mLastForce = now;
-						}
-						mLastTime = now;
-						mLastX = capteursValues.get(i).getValues()[SensorManager.DATA_X];
-						mLastY = capteursValues.get(i).getValues()[SensorManager.DATA_Y];
-						mLastZ = capteursValues.get(i).getValues()[SensorManager.DATA_Z];
-
-					}
+				{
+					msg = mHandler.obtainMessage();
+					msg.obj = new String("!! Grosse Secousse !!\n");
+					msg.arg1 = (int)(capteursValues.get(i).getValues()[0]*1000);
+					msg.arg2 = MESSAGE_RECORD;
+		            mHandler.sendMessage(msg);
+					
+					
 				}
 			}
 

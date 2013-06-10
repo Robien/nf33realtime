@@ -166,7 +166,7 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				sensorManager.registerListener(this, capteur.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
-				Log.d("DADU", "Register n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
+				//Log.d("DADU", "Register n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
 			}
 		}
 	}
@@ -178,7 +178,7 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				sensorManager.unregisterListener(this, capteur.getSensor());
-				Log.d("DADU", "unregister n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
+				//Log.d("DADU", "unregister n°" + capteur.getId() + " type : "+ capteur.getSensor().getType() + " name : " + capteur.getName() + " sensor : " + capteur.getSensor());
 			}
 		}
 		isTestingMaxPeriod = true;
@@ -247,7 +247,6 @@ public class CapteurManager implements SensorEventListener
 
 	private void stop()
 	{
-		Log.d("DADU", "stop");
 		sensorManager.unregisterListener(this, capteurCourant.getSensor());
 		// fichier.close();
 	}
@@ -265,7 +264,6 @@ public class CapteurManager implements SensorEventListener
 		{
 			if (capteur.isUsed())
 			{
-				Log.d("DADU", "CapteurManager : capteur type : " + capteur.getSensor().getType());
 				if (max < capteur.getMaxPeriode())
 				{
 					max = capteur.getMaxPeriode();
@@ -289,7 +287,6 @@ public class CapteurManager implements SensorEventListener
 			if (capteur.isUsed())
 			{
 				listCateurs.add(capteur);
-				Log.d("DADU", "getListeCapteurUtilise id :" + capteur.getId());
 			}
 		}
 		return listCateurs;
