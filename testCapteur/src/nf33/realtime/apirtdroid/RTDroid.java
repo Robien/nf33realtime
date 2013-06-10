@@ -67,7 +67,9 @@ public final class RTDroid
 		mutexConfigurationEnCours.lock();
 		configurationEnCours++;
 		mutexConfigurationEnCours.unlock();
-		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande);
+		 // creation du thread principal RTMainThread
+		_threadPrincipal = new RTMainThread(runnable, capteurManager, true);
+		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande, _threadPrincipal);
 		threadCapteur.start();
 		return null;
 	}
@@ -82,8 +84,6 @@ public final class RTDroid
 		}
 		mutexConfigurationEnCours.unlock();
 		
-		 // creation du thread principal RTMainThread
-		_threadPrincipal = new RTMainThread(runnable, capteurManager, true);
 		 // configuration du temps de capteur max
 		_threadPrincipal.set_maxDurationCapteur(maxDurationCapteurEtExe - maxDurationExecution);
 		 // configuration du temps de exe max

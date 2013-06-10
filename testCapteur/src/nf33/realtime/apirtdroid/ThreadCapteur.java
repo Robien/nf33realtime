@@ -9,13 +9,15 @@ public class ThreadCapteur extends Thread
 	private RTRunnable programmeUtilisateur;
 	private RTDroid rtdroid;
 	private Long periodeDemande;
+	private RTMainThread mainThread;
 
-	public ThreadCapteur(CapteurManager mgr, RTRunnable programmeUtilisateur, RTDroid rtdroid, Long periodeDemande)
+	public ThreadCapteur(CapteurManager mgr, RTRunnable programmeUtilisateur, RTDroid rtdroid, Long periodeDemande, RTMainThread mainThread)
 	{
 		capteurManager = mgr;
 		this.programmeUtilisateur = programmeUtilisateur;
 		this.rtdroid = rtdroid;
-		this.periodeDemande = periodeDemande;  
+		this.periodeDemande = periodeDemande; 
+		this.mainThread = mainThread;
 
 	}
 
@@ -58,8 +60,6 @@ public class ThreadCapteur extends Thread
 			}
 		}
 		Long wcetAPI = 0l;
-		DummyRunnable dummy = new DummyRunnable();
-		RTMainThread mainThread = new RTMainThread(dummy, capteurManager, true);
 		for (int i = 0; i < 100; ++i)
 		{
 			Long tmp = mainThread.voidRun();
