@@ -7,24 +7,40 @@
         android:id="@+id/titre"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/titre" />
-    
+        android:gravity="center_horizontal"
+        android:text="@string/titre"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/bouton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="@string/boutonStart"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/info"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-    
-    <Button
-      android:id="@+id/bouton"
-	  android:layout_width="fill_parent"
-	  android:layout_height="wrap_content"
-	  android:layout_gravity="bottom"
-	  android:text="@string/boutonStart" />
-    
-     <TextView
+        android:layout_height="wrap_content"
+        android:layout_weight="0.13"
+        android:gravity="center"
+        android:textSize="30sp" />
+
+    <TextView
         android:id="@+id/infocapteurs"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-         />
+        android:layout_weight="0.50"
+        android:gravity="center"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/record"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:gravity="center"
+        android:textSize="30sp" />
 
 </LinearLayout>

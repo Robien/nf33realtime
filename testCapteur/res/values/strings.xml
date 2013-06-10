@@ -5,7 +5,7 @@
     <string name="hello">Hello World, TestCapteurActivity!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-	<string name="titre">Test des capteurs</string>
+	<string name="titre">Application utilisateur (API RTDroid)</string>
     <string name="information">Les données ont été recuperées : \n - %1$tN ns</string>
     <string name="boutonStart">Start</string>
     <string name="boutonStop">Stop</string>
