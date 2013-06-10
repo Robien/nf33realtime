@@ -257,6 +257,7 @@ public class CapteurManager implements SensorEventListener
 		{
 			if (capteur.isUsed())
 			{
+				Log.d("DADU", "CapteurManager : capteur type : " + capteur.getSensor().getType());
 				if (max < capteur.getMaxPeriode())
 				{
 					max = capteur.getMaxPeriode();
