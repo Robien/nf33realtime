@@ -76,7 +76,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
 		
 		int i = 0;
-		while(i< rtdroid.getCapteurManager().getListeCapteurs().size() && rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() != SensorManager.SENSOR_ACCELEROMETER)
+		while(i < rtdroid.getCapteurManager().getListeCapteurs().size() && rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType() != SensorManager.SENSOR_ACCELEROMETER)
 		{
 			++i;
 		}
@@ -84,10 +84,13 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 		{
 			// ajoute le capteur
 			listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(i));
+			Log.d("DADU", "Capteur choisie ("+ SensorManager.SENSOR_ACCELEROMETER+") : "+rtdroid.getCapteurManager().getListeCapteurs().get(i).getSensor().getType());
 		}
 		else
 		{
 			Log.d("DADU", "Aucun accelerometre trouvé !!");
+			// ajoute le capteur
+			listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
 		}
 		
 		

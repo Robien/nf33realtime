@@ -302,7 +302,7 @@ public class RTMainThread extends Thread
 				}
 				else
 				{
-					Log.d("DADU", "Calculfonc - 4.5 : " + i + " DONNE NON TROUVE !");
+					Log.d("DADU", "Calculfonc  : " + i + " DONNE NON TROUVE !");
 				}
 			}
 			gettime = System.nanoTime(); 				//recupere le temps en nanoseconde

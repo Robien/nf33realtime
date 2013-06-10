@@ -80,6 +80,7 @@ public final class RTDroid
 		if (configurationEnCours > 0 || !isPossible)
 		{
 			mutexConfigurationEnCours.unlock();
+			Log.d("DADU", "Impossible de lancer, is possib : "+ isPossible + " config : " + configurationEnCours);
 			return false;
 		}
 		mutexConfigurationEnCours.unlock();
