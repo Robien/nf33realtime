@@ -93,7 +93,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 			listeCapteur.add(rtdroid.getCapteurManager().getListeCapteurs().get(2));
 		}
 		
-		
+		Log.d("DADU", "size liste capteur coté activity " + listeCapteur.size());
 		rtdroid.declare(programmeUtilisateur, listeCapteur, 1000000000l);
 		
 

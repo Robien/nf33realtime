@@ -60,7 +60,8 @@ public final class RTDroid
 		for (Capteur capteur : capteurManager.getListeCapteurs())
 		{
 			capteur.setIsUsed(false);
-		}		
+		}
+		Log.d("DADU", "size liste capteur " + listCapteurs.size());
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
