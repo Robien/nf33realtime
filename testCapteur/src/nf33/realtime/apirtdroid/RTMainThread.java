@@ -129,6 +129,7 @@ public class RTMainThread extends Thread
 				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
 				capteursValues.get(i).setTimestampCaptureApi(dateCap);
 				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
 			}
 			
 			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
@@ -292,16 +293,18 @@ public class RTMainThread extends Thread
 			//Simulation  : recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
 			{
-				if (capteurUtilise.get(i).getLastSensorEvent() == null)
+				if (capteurUtilise.get(i).getLastSensorEvent() != null)
 				{
-					Log.d("DADU", "Calculfonc - 4.5 : " + i + " DONNE NON TROUVE !");
-				}
 				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
 				capteursValues.get(i).setTimestampCaptureApi(gettime);
 				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
 				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
+				}
+				else
+				{
+					Log.d("DADU", "Calculfonc - 4.5 : " + i + " DONNE NON TROUVE !");
+				}
 			}
-			
 			gettime = System.nanoTime(); 				//recupere le temps en nanoseconde
 			thisPeriode = gettime - beginTimeExe; 			//calcul de la periode exacte 
 			if(_logActived)
@@ -310,10 +313,8 @@ public class RTMainThread extends Thread
 				_log.affiche_log("Calculfonc - Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
 			}
 			
-				
 			endTimeExe = System.nanoTime();					//Simulation  : recupere le temps en nanoseconde de la fin de lexecution
 			
-
 			needSleep = _maxDurationExe-(endTimeExe - gettime) ; //Simulation  : calcul du temps de sleep necessaire pour compenser le gigue
 			if(needSleep<0)//Simulation  : erreur, execution plus long que prévu
 			{
@@ -325,7 +326,6 @@ public class RTMainThread extends Thread
 				}
 				needSleep = 0;
 			}
-			
 			//Simulation  : Attente de la fin de la periode d'execution
 
 				if(_nanoAccuracy)
@@ -343,5 +343,6 @@ public class RTMainThread extends Thread
 		endTimeExe = System.nanoTime();
 		_capteurManager.stopCapteurCapteur();
 		return endTimeExe-beginTimeExe;
+	
 	}
 }
