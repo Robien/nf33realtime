@@ -37,11 +37,14 @@ public final class Tools
 				Thread.sleep(toMilli(nanos));	
 			break;
 			case WAIT_ACTIVE:
+				
 				long waitDate = System.nanoTime() + nanos;
+				
 				while( System.nanoTime() < waitDate ) 
 				{
-					
+					Thread.sleep(0,1);	
 				}
+				
 				break;
 			default :
 				Thread.sleep(toMilli(nanos),remainderNano(nanos));	

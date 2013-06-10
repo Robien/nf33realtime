@@ -65,7 +65,9 @@ public class RTMainThread extends Thread
 		long needSleep =0; 									//temps de sleep  (en milli)
 		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		
-		
+		long debutPeriode = 0;
+		long finPeriode = 0;
+		long tempsCompensation = 0;
 
 		if(_logActived)
 		{
@@ -84,7 +86,7 @@ public class RTMainThread extends Thread
 		_capteurManager.startCaptureCapteur();
 		
 		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
-		
+		debutPeriode = System.nanoTime(); 				//recupere le temps en nanoseconde
 		//debut de l'execution du code utulisateur
 		while(true)
 		{
@@ -101,7 +103,6 @@ public class RTMainThread extends Thread
 					_log.affiche_log("End execution"+  System.nanoTime());
 					_log.closeLog();
 				}
-				
 				break; //stop the Thread
 			}
 			
@@ -139,22 +140,28 @@ public class RTMainThread extends Thread
 			_runnable.periodicEvent(thisPeriode, capteursValues);	
 			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde de la fin de lexecution
 			
+			finPeriode = System.nanoTime();					//recupere le temps en nanoseconde de la fin de l'execution
 
-			needSleep = _maxDurationExe-(endTimeExe - beginTimeExe) ; //calcul du temps de sleep necessaire pour compenser le gigue
-			if(needSleep<0)//erreur, execution plus long que prévu
+			tempsCompensation = frequenceAttendu - (finPeriode - debutPeriode); //calcul du temps necessaire pour finir la periode
+			//needSleep = _maxDurationExe-(endTimeExe - beginTimeExe) ; //calcul du temps de sleep necessaire pour compenser le gigue
+//			if(needSleep<0)//erreur, execution plus long que prévu
+			if(tempsCompensation<0)//erreur, execution plus long que prévu
 			{
 				if(_logActived)
 				{
 					_log.threaded_write("Erreur, execution plus long que prévu : " + Tools.timeToString(endTimeExe - beginTimeExe));
 					_log.affiche_log("Erreur, execution plus long que prévu" + Tools.timeToString(endTimeExe - beginTimeExe));
 				}
-				needSleep = 0;
+				//needSleep = 0;
+				tempsCompensation  = 0;
 			}
+			
 			
 			//Attente de la fin de la periode d'execution
 			try
 			{
-				 Tools.waitTime(needSleep);
+				// Tools.waitTime(needSleep);
+				 Tools.waitTime(tempsCompensation);
 			}
 			catch (InterruptedException e)
 			{
@@ -166,8 +173,10 @@ public class RTMainThread extends Thread
 				}
 				break; //stop the thread
 			}
+			debutPeriode = System.nanoTime(); 				//recupere le temps en nanoseconde
 		
 		}
+		
 		_capteurManager.stopCapteurCapteur();
 	}
 

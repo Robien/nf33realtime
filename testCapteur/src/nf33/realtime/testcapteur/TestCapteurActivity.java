@@ -48,12 +48,8 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
                 }
                 break;
             case ProgrammeUtilisateur.MESSAGE_RECORD:
-                texte.setText(message + msg.arg1);
-                if (record < msg.arg1)
-                {
-                    record = msg.arg1;
-                    texterecord.setText("record : " + record);
-                }
+                texte.setText(message);
+                //texterecord.setText("Moyen précision : " + msg.arg1);
                 break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
                 b.setEnabled(true);
@@ -107,7 +103,7 @@ public class TestCapteurActivity extends Activity implements View.OnClickListene
 
        
         Log.d("DADU", "size liste capteur coté activity " + listeCapteur.size());
-        rtdroid.declare(programmeUtilisateur, listeCapteur, 0l);
+        rtdroid.declare(programmeUtilisateur, listeCapteur, 1000000000l);
        
 
     }

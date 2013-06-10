@@ -39,6 +39,9 @@ public class ProgrammeUtilisateur implements RTRunnable
     private long mLastShake;
     private long mLastForce;
     private long frequenceAttendu = 0;
+    
+    private double sommePrecision = 0;
+    private float nbPrecision =0;
    
     ProgrammeUtilisateur(RTDroid rtdroid, Handler handler)
     {
@@ -102,6 +105,8 @@ public class ProgrammeUtilisateur implements RTRunnable
         /***************Programme utilisateur***********************/
         Message msg = mHandler.obtainMessage();
         msg.arg2 = MESSAGE_PERIODE;
+        sommePrecision += ((float)timeSinceLast/(float)(frequenceAttendu));
+        nbPrecision++;
         msg.obj = new String("Erreur : " +  ((float)timeSinceLast/(float)(frequenceAttendu)) );
         msg.arg1 = (int)(timeSinceLast);
         mHandler.sendMessage(msg);
@@ -113,8 +118,7 @@ public class ProgrammeUtilisateur implements RTRunnable
                 if (capteursValues.get(i).getType() == 1)
                 {
                     msg = mHandler.obtainMessage();
-                    msg.obj = new String("!! Grosse Secousse !!\n");
-                    msg.arg1 = (int)(capteursValues.get(i).getValues()[0]*1000);
+                    msg.obj = new String("Nouvelle valeur\nx:"+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny"+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz"+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
                     msg.arg2 = MESSAGE_RECORD;
                     mHandler.sendMessage(msg);
                    
@@ -126,8 +130,7 @@ public class ProgrammeUtilisateur implements RTRunnable
         else
         {
             msg = mHandler.obtainMessage();
-            msg.obj = new String("!! Grosse Secousse !!\n");
-            msg.arg1 = (int)(0*1000);
+            msg.obj = new String("TestMethode\n");
             msg.arg2 = MESSAGE_RECORD;
             mHandler.sendMessage(msg);
         }
