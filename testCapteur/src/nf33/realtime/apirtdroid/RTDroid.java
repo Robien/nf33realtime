@@ -43,9 +43,14 @@ public final class RTDroid
 	
 	public RTDroid(Activity activity)
 	{
+		this.activity = activity;
+		configurationEnCours = 0;
+	}
+	
+	public void init()
+	{
 		capteurManager = new CapteurManager(activity);
 		//capteursUtilise = new ArrayList<Capteur>();
-		this.activity = activity;
 		configurationEnCours = 0;
 	}
 

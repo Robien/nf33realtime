@@ -11,14 +11,38 @@
         android:text="@string/titre"
         android:textSize="16sp" />
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/boutonConfig"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/boutonConfigurationStart"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/numEditFre"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="numberDecimal" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+    
     <Button
-        android:id="@+id/bouton"
+        android:id="@+id/boutonExe"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="@string/boutonStart"
         android:textSize="16sp" />
-
+    
     <TextView
         android:id="@+id/info"
         android:layout_width="fill_parent"
@@ -36,7 +60,7 @@
         android:textSize="40sp" />
 
     <TextView
-        android:id="@+id/record"
+        android:id="@+id/infogeneral"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.10"
