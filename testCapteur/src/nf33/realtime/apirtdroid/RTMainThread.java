@@ -23,22 +23,27 @@ public class RTMainThread extends Thread
 	private RTRunnable _runnable;
 	//sauvegarde des log activé
 	private boolean _logActived;
-	//sauvegarde des log activé
+	//permet de bloquer l'attente de compensation
+	private boolean _noWait;
+	//fichier de log
 	private Logs _log;
 
 	
 	private CapteurManager _capteurManager;
 		
+	//constructeur
 	public RTMainThread(RTRunnable _runnable, CapteurManager capteurManager)
 	{
 		super();
 		this._runnable = _runnable;
 		_logActived = false;
+		_noWait = false;
 
 		_log = null;
 		_capteurManager = capteurManager;
 	}
 
+	//constructeur
 	public RTMainThread(RTRunnable _runnable, CapteurManager capteurManager, boolean activelog)
 	{
 		super();
@@ -56,127 +61,125 @@ public class RTMainThread extends Thread
 		_capteurManager = capteurManager;
 	}
 
+	//fonction principal du thread
 	public void run()
 	{
-
-		long beginTimeExe = 0; 								//stock le temps du début de l'execution  (en nano)
-		long endTimeExe = 0;								//stock le temps de la fin de l'execution  (en nano)
+		//initialisation
+		long debutExeUtil = 0; 								//stock le temps du début de l'execution  (en nano)
+		long finExeUtil = 0;								//stock le temps de la fin de l'execution  (en nano)
 		long dateCap = 0;									//stock le temps de recuperation des capteurs  (en nano)
-		long needSleep =0; 									//temps de sleep  (en milli)
-		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
-		
+		long lastPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
 		long debutPeriode = 0;
-		long finPeriode = 0;
 		long tempsCompensation = 0;
 
 		if(_logActived)
 		{
-			_log.threaded_write("Debut initialisation : " + endTimeExe + " durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu + "Precision nano : " + Tools.type_wait);
-			_log.affiche_log("Debut initialisation : " + endTimeExe +  " durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu + "Precision nano : " + Tools.type_wait);
+			_log.threaded_write("-----------Fichier log RTDroid-----------\n--Date début" + System.nanoTime() + "--\n--type d'attente" + Tools.typeWaitToString() + "--\n Attente compensation : " + !_noWait + "--\n");
+			_log.threaded_write(" durée max capteur : " + _maxDurationCap + "\nfréquence execution : " + frequenceAttendu);
+			_log.affiche_log(" durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu);
 		}
 		
+		//Liste de capteur
 		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
 		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
 		
+		//ajout des capteurs dans la liste
 		for (Capteur capteur : capteurUtilise)
 		{
 			capteursValues.add(new CapteurValue());
 		}
 		
+		//Début de capture des capteurs
 		_capteurManager.startCaptureCapteur();
 		
-		endTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
+		//initialisation du temps de debut de periode
 		debutPeriode = System.nanoTime(); 				//recupere le temps en nanoseconde
 		//debut de l'execution du code utulisateur
 		while(true)
 		{
-			//Attente de la fin de la periode
+			//Attente de la fin de la periode de capture
 			try
 			{
-				 Tools.waitTime(_maxDurationCap);//attend la fin de la fenetre de capture des données capteurs
+				Tools.waitTime(_maxDurationCap);//attend la fin de la fenetre de capture des données capteurs
 			}
 			catch (InterruptedException e)
 			{
-				if(_logActived)
-				{
-					_log.threaded_write("End execution, "+  System.nanoTime());
-					_log.affiche_log("End execution"+  System.nanoTime());
-					_log.closeLog();
-				}
 				break; //stop the Thread
 			}
 			
-
+			//date de capture des capteurs
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
-			if(_logActived)
+			if(_logActived) //log
 			{
 				_log.threaded_write("Date capteur : " +Tools.timeToString(dateCap) );
 				_log.affiche_log("Date capteur : " +Tools.timeToString(dateCap) );
 			}
+			
 			//recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
 			{
-				if (capteurUtilise.get(i).getLastSensorEvent() == null)
+				if(capteurUtilise.get(i).getLastSensorEvent() == null && _logActived) //log
 				{
-					Log.d("DADU", "4.5 : " + i + " DONNE NON TROUVE !");
-					
+					_log.threaded_write("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
+					_log.affiche_log("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
 				}
 				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
 				capteursValues.get(i).setTimestampCaptureApi(dateCap);
 				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
 				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
-				Log.d("DADU2", "id capteur récup : " + capteurUtilise.get(i).getId());
 			}
 			
-			beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
-			thisPeriode = beginTimeExe - endTimeExe; 			//calcul de la periode exacte 
-			if(_logActived)
+			if(_logActived)//log
 			{
-				_log.threaded_write("Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(frequenceAttendu)));
-				_log.affiche_log("Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(frequenceAttendu)));
+				_log.threaded_write("Periode : " +Tools.timeToString(lastPeriode) + " precision : "+ ((double)lastPeriode/(double)(frequenceAttendu)));
+				_log.affiche_log("Periode : " +Tools.timeToString(lastPeriode) + " precision "+ ((double)lastPeriode/(double)(frequenceAttendu)));
 			}
 			
-			//Appel de la methode à executer 
-			_runnable.periodicEvent(thisPeriode, capteursValues);	
-			endTimeExe = System.nanoTime();					//recupere le temps en nanoseconde de la fin de lexecution
-			
-			finPeriode = System.nanoTime();					//recupere le temps en nanoseconde de la fin de l'execution
+			//debut de l'exécution du code utilisateur
+			debutExeUtil = System.nanoTime();	
+			//Appel de la methode à exécuter : parametre : dernier periode, valeurs des capteurs
+			_runnable.periodicEvent(lastPeriode, capteursValues);
 
-			tempsCompensation = frequenceAttendu - (finPeriode - debutPeriode); //calcul du temps necessaire pour finir la periode
-			//needSleep = _maxDurationExe-(endTimeExe - beginTimeExe) ; //calcul du temps de sleep necessaire pour compenser le gigue
-//			if(needSleep<0)//erreur, execution plus long que prévu
-			if(tempsCompensation<0)//erreur, execution plus long que prévu
+			//fin de l'execution du code utilisateur
+			finExeUtil = System.nanoTime();					
+			if(!_noWait)
 			{
-				if(_logActived)
+				//calcul du temps necessaire pour finir la periode
+				tempsCompensation = frequenceAttendu - (finExeUtil - debutPeriode); 
+				
+				if(tempsCompensation<0)//erreur, execution plus long que prévu
 				{
-					_log.threaded_write("Erreur, execution plus long que prévu : " + Tools.timeToString(endTimeExe - beginTimeExe));
-					_log.affiche_log("Erreur, execution plus long que prévu" + Tools.timeToString(endTimeExe - beginTimeExe));
+					if(_logActived)
+					{
+						_log.threaded_write("Erreur, exécution code util. trop long : " + Tools.timeToString(finExeUtil - debutExeUtil) + "au lieu de : "+ Tools.timeToString(frequenceAttendu-_maxDurationCap));
+						_log.affiche_log("Erreur, exécution code util. trop long :" + Tools.timeToString(finExeUtil - debutExeUtil)+ "au lieu de : "+ Tools.timeToString(frequenceAttendu-_maxDurationCap));
+					}
+					tempsCompensation  = 0;
 				}
-				//needSleep = 0;
-				tempsCompensation  = 0;
-			}
-			
-			
-			//Attente de la fin de la periode d'execution
-			try
-			{
-				// Tools.waitTime(needSleep);
-				 Tools.waitTime(tempsCompensation);
-			}
-			catch (InterruptedException e)
-			{
-				if(_logActived)
+				
+				//Attente de la fin de la periode d'execution
+				try
 				{
-					_log.threaded_write("End execution"+  System.nanoTime());
-					_log.threaded_write("End execution"+  System.nanoTime());
-					_log.closeLog();
+					 Tools.waitTime(tempsCompensation);
 				}
-				break; //stop the thread
+				catch (InterruptedException e)
+				{
+					break; //stop the thread
+				}
 			}
+			//calcul de la periode reel de la dernier boucle
+			lastPeriode = System.nanoTime() - debutPeriode;
+			//debut de la nouvelle periode
 			debutPeriode = System.nanoTime(); 				//recupere le temps en nanoseconde
 		
 		}
 		
+		if(_logActived)
+		{
+			_log.threaded_write("End execution, "+  System.nanoTime());
+			_log.affiche_log("End execution"+  System.nanoTime());
+			_log.closeLog();
+		}
 		_capteurManager.stopCapteurCapteur();
 	}
 
@@ -227,102 +230,135 @@ public class RTMainThread extends Thread
 		return _logActived;
 	}
 
+	public boolean isNoWait()
+	{
+		return _noWait;
+	}
 
-	
-	//Simulation du code API, retourne le temps necessaire
+	public synchronized void setNoWait(boolean noWait)
+	{
+		this._noWait = noWait;
+	}
+
+	// Simulation du code API, retourne le temps necessaire (WCET-API)
 	public long voidRun()
 	{
-		long beginTimeExe = 0; 								//stock le temps du début de l'execution  (en nano)
-		long endTimeExe = 0;								//stock le temps de la fin de l'execution  (en nano)
-		long gettime = 0;									//stock le temps de recuperation des capteurs  (en nano)
-		long needSleep =0; 									//temps de sleep  (en milli)
-		long thisPeriode = 0; 								//temps entre les deux dernier execution  (en nano)
-		
+		// initialisation des variable necessaire à la fonction
+		long debutExeUtil = 0; // stock le temps du début de l'execution (en nano)
+		long finExeUtil = 0; // stock le temps de la fin de l'execution (en nano)
+		long dateCap = 0; // stock le temps de recuperation des capteurs (en nano)
+		long lastPeriode = 0; // temps entre les deux dernier execution (en nano)
+		long debutPeriode = 0; // debut de la nouvelle periode (en nano)
+		long tempsCompensation = 0; // variable pour contenir le temps de sleep necessaire (en nano)
+		// initialisation variable pour le calcul du temps d'exectution
+		long endTimeExe = 0;
+		long beginTimeExe = 0;
+		// Liste de capteur
 		ArrayList<CapteurValue> capteursValues = new ArrayList<CapteurValue>();
 		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
-		
+
+		// ajout des capteurs dans la liste
 		for (Capteur capteur : capteurUtilise)
 		{
 			capteursValues.add(new CapteurValue());
 		}
-		
+
+		// Début de capture des capteurs
 		_capteurManager.startCaptureCapteur();
+
 		try
 		{
-			 Tools.waitTime(_maxDurationCap);
+			// attent qu'une valeur soit recuperé
+			Tools.waitTime(_maxDurationCap);
 		}
 		catch (InterruptedException e)
 		{
 			Log.d("DADU", "voidRun Erreur de sleep");
 			e.printStackTrace();
-		} //attend qu'il y ai au moins une valeur
-		
-		//recupere temps de début de la fonction à simuler
-		beginTimeExe = System.nanoTime(); 				//recupere le temps en nanoseconde
-		
-		//Simulation  d'execution
-		if(true)
+		} // attend qu'il y ai au moins une valeur
+
+		// initialisation du temps de debut de periode
+		debutPeriode = System.nanoTime();
+		beginTimeExe = System.nanoTime();
+		// Simulation d'execution
+		if (true)
 		{
-			
-			
-			Tools.toMilli(_maxDurationCap);
-			Tools.remainderNano(_maxDurationCap);
-			
+			// Attente de la fin de la periode de capture
+			Tools.simulewaitTime(_maxDurationCap);
 
-
-			gettime = System.nanoTime(); 					//recupere le temps en nanoseconde
-			if(_logActived)
+			// date de capture des capteurs
+			dateCap = System.nanoTime(); // recupere le temps en nanoseconde
+			if (_logActived) // log
 			{
-				_log.threaded_write("Calculfonc - Date capteur : " +Tools.timeToString(gettime) );
-				_log.affiche_log("Calculfonc - Date capteur : " +Tools.timeToString(gettime) );
+				_log.threaded_write("/INIT/Date capteur : " + Tools.timeToString(dateCap));
+				_log.affiche_log("/INIT/Date capteur : " + Tools.timeToString(dateCap));
 			}
-			//Simulation  : recuperation des données capteurs
+
+			// recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
 			{
-				if (capteurUtilise.get(i).getLastSensorEvent() != null)
+				if (capteurUtilise.get(i).getLastSensorEvent() == null && _logActived) // log
 				{
+					_log.threaded_write("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
+					_log.affiche_log("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
+				}
 				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
-				capteursValues.get(i).setTimestampCaptureApi(gettime);
+				capteursValues.get(i).setTimestampCaptureApi(dateCap);
 				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
 				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
-				Log.d("DADU2", "id capteur récup : " + capteurUtilise.get(i).getId());
-				}
-				else
-				{
-					Log.d("DADU", "Calculfonc  : " + i + " DONNE NON TROUVE !");
-				}
 			}
-			gettime = System.nanoTime(); 				//recupere le temps en nanoseconde
-			thisPeriode = gettime - beginTimeExe; 			//calcul de la periode exacte 
-			if(_logActived)
-			{
-				_log.threaded_write("Calculfonc - Periode : " +Tools.timeToString(thisPeriode) + " precision : "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
-				_log.affiche_log("Calculfonc - Periode : " +Tools.timeToString(thisPeriode) + " precision "+ ((double)thisPeriode/(double)(_maxDurationCap+_maxDurationExe)));
-			}
-			
-			endTimeExe = System.nanoTime();					//Simulation  : recupere le temps en nanoseconde de la fin de lexecution
-			
-			needSleep = _maxDurationExe-(endTimeExe - gettime) ; //Simulation  : calcul du temps de sleep necessaire pour compenser le gigue
-			if(needSleep<0)//Simulation  : erreur, execution plus long que prévu
-			{
-				if(_logActived)
-				{
-					
-					_log.threaded_write("Calculfonc - Erreur, execution plus long que prévu : " + Tools.timeToString(endTimeExe - gettime));
-					_log.affiche_log("Calculfonc - Erreur, execution plus long que prévu" + Tools.timeToString(endTimeExe - gettime));
-				}
-				needSleep = 0;
-			}
-			//Simulation  : Attente de la fin de la periode d'execution
 
-			Tools.toMilli(_maxDurationCap);
-			Tools.remainderNano(_maxDurationCap);
+			if (_logActived)// log
+			{
+				_log.threaded_write("/INIT/Periode : " + Tools.timeToString(lastPeriode) + " precision : "
+						+ ((double) lastPeriode / (double) (frequenceAttendu)));
+				_log.affiche_log("/INIT/Periode : " + Tools.timeToString(lastPeriode) + " precision "
+						+ ((double) lastPeriode / (double) (frequenceAttendu)));
+			}
+
+			// debut de l'exécution du code utilisateur
+			debutExeUtil = System.nanoTime();
+			/*
+			 * Code ne devant pas être executé //Appel de la methode à exécuter
+			 * : parametre : dernier periode, valeurs des capteurs
+			 * _runnable.periodicEvent(lastPeriode, capteursValues);
+			 */
+
+			// fin de l'execution du code utilisateur
+			finExeUtil = System.nanoTime();
+			if (!_noWait)
+			{
+				// calcul du temps necessaire pour finir la periode
+				tempsCompensation = frequenceAttendu - (finExeUtil - debutPeriode);
+
+				if (tempsCompensation < 0)// erreur, execution plus long que
+											// prévu
+				{
+					if (_logActived)
+					{
+						_log.threaded_write("/INIT/Erreur, exécution code util. trop long : " + Tools.timeToString(finExeUtil - debutExeUtil)
+								+ "au lieu de : " + Tools.timeToString(frequenceAttendu - _maxDurationCap));
+						_log.affiche_log("/INIT/Erreur, exécution code util. trop long :" + Tools.timeToString(finExeUtil - debutExeUtil)
+								+ "au lieu de : " + Tools.timeToString(frequenceAttendu - _maxDurationCap));
+					}
+					tempsCompensation = 0;
+				}
+
+				// Attente de la fin de la periode d'execution
+				Tools.simulewaitTime(tempsCompensation);
+
+			}
+			// calcul de la periode reel de la dernier boucle
+			lastPeriode = System.nanoTime() - debutPeriode;
+			// debut de la nouvelle periode
+			debutPeriode = System.nanoTime(); // recupere le temps en
+												// nanoseconde
 
 		}
-		//recuperation du temps de la fin de la fonction a simuler
+		// recuperation du temps de la fin de la fonction a simuler
 		endTimeExe = System.nanoTime();
 		_capteurManager.stopCapteurCapteur();
-		return endTimeExe-beginTimeExe;
-	
+		return endTimeExe - beginTimeExe;
+
 	}
 }
