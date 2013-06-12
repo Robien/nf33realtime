@@ -20,28 +20,12 @@ public class ProgrammeUtilisateur implements RTRunnable
     public static final int MESSAGE_PERIODE = 1;
     public static final int MESSAGE_FINCONFIG = 0;
    
-    //vitesse minimun pour détecter un shake
-    private static final int FORCE_THRESHOLD = 20;//350;
-    // temps minimun pour commencer a détecter la position du téléphone
-    private static final long TIME_THRESHOLD =100000000l;
-    // temps minimun entre 2 position pour être considérer comme un shaker
-    private static final long SHAKE_TIMEOUT = 5000000000l;
-    // temps entre un 2 shake pour incrementer le nombre de shake
-    private static final long SHAKE_DURATION = 1000000000l;
-    // nombre de shake pour lancer une action
-    private static final int SHAKE_COUNT = 1;
-   
-    private SensorManager mSensorMgr;
-    private float mLastX=-1.0f, mLastY=-1.0f, mLastZ=-1.0f;
-    private long mLastTime;
-
-    private int mShakeCount = 0;
-    private long mLastShake;
-    private long mLastForce;
     private long frequenceAttendu = 1;
     
     private double sommePrecision = 0;
-    private float nbPrecision =0;
+    private float nbPrecision = 0;
+    private boolean executionStarted = false;
+    
    
     ProgrammeUtilisateur(RTDroid rtdroid, Handler handler)
     {
@@ -49,9 +33,19 @@ public class ProgrammeUtilisateur implements RTRunnable
         mHandler = handler;
     }
    
+    //methode appellée avant l'execution de la methode utilisateur
+	@Override
+	public void init()
+	{
+	    sommePrecision = 0;
+	    nbPrecision = 0;
+	    executionStarted = false;
+
+		
+	}
 
 
-
+	//methode appelée a la fin de la configuration
     @Override
     public void endConfiguration(Boolean isRunable, Long frequence, Long wcet)
     {
@@ -78,47 +72,23 @@ public class ProgrammeUtilisateur implements RTRunnable
     @Override
     public void periodicEvent(long timeSinceLast, ArrayList<CapteurValue> capteursValues)
     {
-        /*
-        try
-        {
-            Thread.sleep((long) (Math.random()*90), 0);
-            Message msg = mHandler.obtainMessage();
-            msg.obj = new String("période : ");
-            msg.arg1 = (int)(timeSinceLast);
-            mHandler.sendMessage(msg);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        if (capteursValues == null)
-        {
-            try
-            {
-                Thread.sleep((long) (Math.random()*15), 0);
-            }
-            catch (InterruptedException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Log.d("DADU", "VIVE LES POMMES");
-            Log.d("DADUtilisateur", "" +capteursValues.get(0).getValues()[0]);
-        }
-        */
+    	/***************Programme utilisateur***********************/
+		if (executionStarted)
+		{
+			// envoie de la periode à l'interface
+			Message msg = mHandler.obtainMessage();
+			msg.arg2 = MESSAGE_PERIODE;
+			sommePrecision += ((double) timeSinceLast / (double) (frequenceAttendu));
+			nbPrecision++;
+			msg.obj = new String("précision : " + ((float) timeSinceLast / (float) (frequenceAttendu)));
+			msg.arg1 = (int) (sommePrecision*1000000000/nbPrecision);
+			mHandler.sendMessage(msg);
+		}
+		else
+		{
+			executionStarted = true;
+		}
        
-        /***************Programme utilisateur***********************/
-        Message msg = mHandler.obtainMessage();
-        msg.arg2 = MESSAGE_PERIODE;
-        sommePrecision += ((float)timeSinceLast/(float)(frequenceAttendu));
-        nbPrecision++;
-        msg.obj = new String("Erreur : " +  ((float)timeSinceLast/(float)(frequenceAttendu)) );
-        msg.arg1 = (int)(timeSinceLast);
-        mHandler.sendMessage(msg);
         if (capteursValues != null)
         {
             for (int i = 0; i < capteursValues.size(); ++i)
@@ -126,8 +96,9 @@ public class ProgrammeUtilisateur implements RTRunnable
                 //si le l'un des capteur est un accelerometre
                 if (capteursValues.get(i).getType() == 1)
                 {
+                	Message msg = mHandler.obtainMessage();
                     msg = mHandler.obtainMessage();
-                    msg.obj = new String("Nouvelle valeur\nx:"+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny"+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz"+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
+                    msg.obj = new String("Nouvelle valeur\nx:"+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny:"+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz:"+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
                     msg.arg2 = MESSAGE_RECORD;
                     mHandler.sendMessage(msg);
                    
@@ -138,6 +109,7 @@ public class ProgrammeUtilisateur implements RTRunnable
         }
         else
         {
+        	Message msg = mHandler.obtainMessage();
             msg = mHandler.obtainMessage();
             msg.obj = new String("TestMethode\n");
             msg.arg2 = MESSAGE_RECORD;
@@ -145,6 +117,9 @@ public class ProgrammeUtilisateur implements RTRunnable
         }
 
     }
+
+
+
 
    
 }

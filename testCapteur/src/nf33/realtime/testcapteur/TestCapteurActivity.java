@@ -30,9 +30,9 @@ public class TestCapteurActivity extends Activity
     private Button _boutonConfig = null;
     private ProgressDialog _chargement = null;
     private EditText _frequenceDem = null;
-    private TextView texte = null;
-    private TextView texteinfogeneral = null;
-    private TextView textebasgeneral = null;
+    private TextView texteInfoCentre = null;
+    private TextView texteprecision = null;
+    private TextView texteInfoBas = null;
     
     //programme utilisateur et API
     private ProgrammeUtilisateur programmeUtilisateur;
@@ -61,25 +61,29 @@ public class TestCapteurActivity extends Activity
             case ProgrammeUtilisateur.MESSAGE_PERIODE:
                 if(configure)
                 {
-                	texteinfogeneral.setText(message + msg.arg1);
+                	texteprecision.setText(message);
+                	double moyen = (double)msg.arg1/(double)10000000;
+                	texteInfoBas.setText("Moyen précision : " + moyen);
                 }
                 break;
             case ProgrammeUtilisateur.MESSAGE_RECORD:
-                texte.setText(message);
-                textebasgeneral.setText("Moyen précision : " + msg.arg1);
+            	if(configure)
+                {
+            		texteInfoCentre.setText(message);
+                }
                 break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
-            	 //_chargement.dismiss();
+            	 _chargement.dismiss();
             	if(msg.arg1 == 0)
             	{
-            		Toast.makeText(getApplicationContext(), "La periode est impossible", Toast.LENGTH_LONG ).show();
+            		Toast.makeText(getApplicationContext(), "La période demandée est impossible à satisfaire", Toast.LENGTH_LONG ).show();
                     allowConfiguration();
             	}
             	else
             	{
             		_boutonExe.setEnabled(true);
                     configure = true;
-                    texteinfogeneral.setText(message);
+                    texteprecision.setText(message);
             	}
                 
                 break;
@@ -110,9 +114,9 @@ public class TestCapteurActivity extends Activity
         _frequenceDem = (EditText) findViewById(R.id.numEditFre);
         _frequenceDem.setText("0");
         //zone de texte
-        texte = (TextView)findViewById(R.id.infocapteurs);
-        texteinfogeneral = (TextView)findViewById(R.id.info);
-        textebasgeneral = (TextView)findViewById(R.id.infogeneral);
+        texteInfoCentre = (TextView)findViewById(R.id.infogeneral);
+        texteprecision = (TextView)findViewById(R.id.infoprecision);
+        texteInfoBas = (TextView)findViewById(R.id.infocomplementaire);
         
         //zone de chargement
         _chargement = new ProgressDialog(this);
@@ -168,14 +172,14 @@ public class TestCapteurActivity extends Activity
 	        if (isStarted)
 	        {
 	            isStarted = _rtdroid.stop();
-	            texteinfogeneral.setText("");
+	            texteprecision.setText("");
 	            allowConfiguration();
 	            
 	        }
 	        else
 	        {
 	            isStarted = _rtdroid.launch();
-	            texteinfogeneral.setText("");
+	            texteprecision.setText("");
 	            
 	            _boutonConfig.setEnabled(false);
 	        }
@@ -196,7 +200,9 @@ public class TestCapteurActivity extends Activity
     
     public void allowConfiguration()
     {
-    	 texteinfogeneral.setText("");
+    	 texteprecision.setText("Entrez une periode en milliseconde puis configuez");
+    	 texteInfoCentre.setText("");
+    	 texteInfoBas.setText("");
          _boutonConfig.setEnabled(true);
          _boutonExe.setEnabled(false);
          configure = false;
@@ -230,9 +236,10 @@ public class TestCapteurActivity extends Activity
 	        {
 	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 	        	imm.hideSoftInputFromWindow(_frequenceDem.getWindowToken(), 0);
-				texteinfogeneral.setText("Configuration...");
+				texteprecision.setText("Configuration...");
 				_chargement.setMessage("Configuration en cours");
 				_boutonConfig.setEnabled(false);
+				
 				// lancer configuration
 				
 				float valeur;
@@ -255,7 +262,7 @@ public class TestCapteurActivity extends Activity
 					Toast.makeText(getApplicationContext(), "La periode est impossible", Toast.LENGTH_LONG ).show();
                     allowConfiguration();
 				}
-				//_chargement.show();
+				_chargement.show();
 	        }
 	
 		}

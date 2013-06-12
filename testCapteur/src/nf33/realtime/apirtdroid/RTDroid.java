@@ -54,16 +54,12 @@ public final class RTDroid
 	{
 
 		this.runnable = runnable;
-		//a changer pour ne pas mettre 2 fois le capteur dans le tableau
-//		for (Capteur capteur : listCapteurs)
-//		{
-//			capteursUtilise.add(capteur);
-//		}
+
 		for (Capteur capteur : capteurManager.getListeCapteurs())
 		{
 			capteur.setIsUsed(false);
 		}
-		Log.d("DADU", "size liste capteur " + listCapteurs.size());
+		
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
@@ -76,6 +72,7 @@ public final class RTDroid
 		mutexConfigurationEnCours.unlock();
 		 // creation du thread principal RTMainThread
 		_threadPrincipal = new RTMainThread(runnable, capteurManager, true);
+		//configuration de la precision d'attente
 		Tools.type_wait = Tools.WAIT_ACTIVE;
 		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande, _threadPrincipal);
 		threadCapteur.start();
@@ -98,12 +95,11 @@ public final class RTDroid
 		 // configuration du temps de exe max
 		_threadPrincipal.set_maxDurationExe(wcetUtilisateur);
 		_threadPrincipal.setFrequenceAttendu(periode);
+		//initialisation du programme utilisateur
+		runnable.init();
 		 // Lancement du thread principal RTMainThread
 		_threadPrincipal.start();
  
-		 
-		
-		
 		return true;
 	}
 
