@@ -35,14 +35,14 @@ public class Logs
 	public void threaded_write(String log)
 	{
 		//ecriture dans le fichier dans un thread
-		LastThread = new ThreadLog(log);
+		LastThread = new ThreadLog(log+ "\n");
 		LastThread.start();
 	}
 	
 	public void write(String log)
 	{
 		//ecriture dans le fichier 
-		journalLog.write(Calendar.getInstance().getTime().toGMTString().replace(' ', '-').replace(':', '-') + " - " + log);
+		journalLog.write(Calendar.getInstance().getTime().toGMTString().replace(' ', '-').replace(':', '-') + " - " + log + "\n");
 	}
 	
 	public void closeLog()
@@ -62,14 +62,13 @@ public class Logs
 	
 	
 	//Enregistrer des logs envoyer dans l'array dans le fichier fichier
+	@Deprecated
 	public void savelog(ArrayList<String> tabLogs)
 	{
 		int i;
 		
 		try
 		{ 
-			
-			
 			for(i=0; i<tabLogs.size(); i++)
 			{
 				journalLog.write(tabLogs.get(i));	//ecriture du log à la suite du fichier
