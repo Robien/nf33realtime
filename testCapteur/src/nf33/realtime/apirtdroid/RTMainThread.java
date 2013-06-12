@@ -192,7 +192,7 @@ public class RTMainThread extends Thread
 		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
 
 		// ajout des capteurs dans la liste
-		for (Capteur capteur : capteurUtilise)
+		for (@SuppressWarnings("unused") Capteur capteur : capteurUtilise)
 		{
 			capteursValues.add(new CapteurValue());
 		}
