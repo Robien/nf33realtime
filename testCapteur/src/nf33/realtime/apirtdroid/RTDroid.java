@@ -46,6 +46,10 @@ public final class RTDroid
 		capteurManager = new CapteurManager(activity);
 		//capteursUtilise = new ArrayList<Capteur>();
 		configurationEnCours = 0;
+		//configuration generale
+		Tools.setTypeWait(Tools.WAIT_ACTIVE); //choix de l'attente
+		Tools.setLogActived(true); //activer les logs
+		Tools.setPendingCompensation(true); //activer l'attente de compensation
 	}
 	
 
@@ -62,7 +66,6 @@ public final class RTDroid
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
-			//Log.d("DADU", "boucle capteur : " + capteur.getSensor().getType() + " id : " + capteur.getId());
 		}
 		
 		mutexConfigurationEnCours = new ReentrantLock();
@@ -70,9 +73,9 @@ public final class RTDroid
 		configurationEnCours++;
 		mutexConfigurationEnCours.unlock();
 		 // creation du thread principal RTMainThread
-		_threadPrincipal = new RTMainThread(runnable, capteurManager, true);
+		_threadPrincipal = new RTMainThread(runnable, capteurManager);
 		//configuration de la precision d'attente
-		Tools.type_wait = Tools.WAIT_ACTIVE;
+
 		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande, _threadPrincipal);
 		threadCapteur.start();
 		

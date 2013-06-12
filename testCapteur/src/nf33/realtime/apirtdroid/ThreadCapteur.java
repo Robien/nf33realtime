@@ -26,7 +26,7 @@ public class ThreadCapteur extends Thread
 
 	public void run()
 	{
-
+		programmeUtilisateur.progressConfiguration(0, 0);
 		capteurManager.startMesure();
 		do
 		{
@@ -36,7 +36,7 @@ public class ThreadCapteur extends Thread
 				Log.d("DAD", "aucune donnée, on continu");
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(Tools.MAX_WAIT_WCET_CAPTEUR);
 				}
 				catch (InterruptedException e)
 				{
@@ -50,22 +50,16 @@ public class ThreadCapteur extends Thread
 //		capteurManager.stopMesure();
 		Long maxCapteurWait = capteurManager.getPeriodeMax();
 		
-		Log.d("DADU", "Début du calcul du WCET !");
 		ArrayList<Capteur> listeCapteurUtilise = capteurManager.getListeCapteurUtilise();
-		Log.d("DADU", "1");
 		ArrayList<CapteurValue> listeCapteurValue = new ArrayList<CapteurValue>();
-		Log.d("DADU", "2");
 		for (int i = 0; i < listeCapteurUtilise.size();++i)
 		{
-			Log.d("DADU", "3");
 			listeCapteurValue.add(listeCapteurUtilise.get(i).getCapteurValue());
 		}
-		Log.d("DADU", "4");
 		Long total = 0l;
 		int progression = -1;
 		programmeUtilisateur.progressConfiguration(1, 0);
-		Log.d("DADU", "Début du calcul du WCET boucle");
-		for (int i = 0; i < Tools.nbIterationWCETUtilisateur; ++i)
+		for (int i = 0; i < Tools.NB_ITER_WCET_UTIL; ++i)
 		{
 			for (int j = 0; j < listeCapteurUtilise.size(); j++)
 			{
@@ -78,9 +72,9 @@ public class ThreadCapteur extends Thread
 			{
 				total = tmp;
 			}
-			if ((int)((i*100)/ Tools.nbIterationWCETUtilisateur) != progression)
+			if ((int)((i*100)/ Tools.NB_ITER_WCET_UTIL) != progression)
 			{
-				progression = (int)((i*100)/ Tools.nbIterationWCETUtilisateur);
+				progression = (int)((i*100)/ Tools.NB_ITER_WCET_UTIL);
 				programmeUtilisateur.progressConfiguration(1, progression);
 			}
 		}
@@ -90,16 +84,16 @@ public class ThreadCapteur extends Thread
 		Log.d("DADU", "Debut calcul WCETAPI");
 		progression = -1;
 		programmeUtilisateur.progressConfiguration(2, 0);
-		for (int i = 0; i < Tools.nbIterationWCETAPI; ++i)
+		for (int i = 0; i < Tools.NB_ITER_WCET_API; ++i)
 		{
 			Long tmp = mainThread.voidRun(maxCapteurWait);
 			if (wcetAPI < tmp)
 			{
 				wcetAPI = tmp;
 			}
-			if ((int)((i*100)/ Tools.nbIterationWCETAPI) != progression)
+			if ((int)((i*100)/ Tools.NB_ITER_WCET_API) != progression)
 			{
-				progression = (int)((i*100)/ Tools.nbIterationWCETAPI);
+				progression = (int)((i*100)/ Tools.NB_ITER_WCET_API);
 				programmeUtilisateur.progressConfiguration(2, progression);
 			}
 		}

@@ -10,6 +10,7 @@ import android.util.Log;
 import nf33.realtime.apirtdroid.CapteurValue;
 import nf33.realtime.apirtdroid.RTDroid;
 import nf33.realtime.apirtdroid.RTRunnable;
+import nf33.realtime.apirtdroid.Tools;
 
 public class ProgrammeUtilisateur implements RTRunnable
 {
@@ -21,6 +22,7 @@ public class ProgrammeUtilisateur implements RTRunnable
     public static final int MESSAGE_PERIODE = 1;
     public static final int MESSAGE_FINCONFIG = 0;
     public static final int MESSAGE_PROGRESS = 3;
+    public static final int MESSAGE_ENDEXETEST = 4;
    
     private long frequenceAttendu = 1;
     
@@ -49,11 +51,11 @@ public class ProgrammeUtilisateur implements RTRunnable
 
 	//methode appelée a la fin de la configuration
     @Override
-    public void endConfiguration(Boolean isRunable, Long frequence, Long wcet)
+    public void endConfiguration(Boolean isRunable, Long periode, Long wcet)
     {
-		frequenceAttendu = frequence;
+		frequenceAttendu = periode;
 		Message msg = mHandler.obtainMessage();
-		msg.obj = new String("Configuration terminée\nfrequence : " + frequence + "\nwcet : " + wcet);
+		msg.obj = new String("Configuration terminée\nPériode : " + Tools.timeToString(periode) + "\nWCET : " + wcet);
 		msg.arg2 = MESSAGE_FINCONFIG;
 		if (isRunable)
 		{
@@ -85,6 +87,13 @@ public class ProgrammeUtilisateur implements RTRunnable
 			msg.obj = new String("précision : " + ((float) timeSinceLast / (float) (frequenceAttendu)));
 			msg.arg1 = (int) (sommePrecision*1000000000/nbPrecision);
 			mHandler.sendMessage(msg);
+			if(nbPrecision>=200)
+			{
+				msg = mHandler.obtainMessage();
+				msg.arg2 = MESSAGE_ENDEXETEST;
+				msg.obj = new String("fin exécution (200fois)\nprécision moyenne : "+  (sommePrecision*100.0/nbPrecision));
+				mHandler.sendMessage(msg);
+			}
 		}
 		else
 		{
@@ -100,7 +109,7 @@ public class ProgrammeUtilisateur implements RTRunnable
                 {
                 	Message msg = mHandler.obtainMessage();
                     msg = mHandler.obtainMessage();
-                    msg.obj = new String("Nouvelle valeur\nx:"+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny:"+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz:"+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
+                    msg.obj = new String("Nouvelle valeur\nx : "+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny : "+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz : "+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
                     msg.arg2 = MESSAGE_CAPTEUR;
                     mHandler.sendMessage(msg);
                    
@@ -113,7 +122,7 @@ public class ProgrammeUtilisateur implements RTRunnable
         {
         	Message msg = mHandler.obtainMessage();
             msg = mHandler.obtainMessage();
-            msg.obj = new String("TestMethode\n");
+            msg.obj = new String("Erreur pas de donnée capteur\n");
             msg.arg2 = MESSAGE_CAPTEUR;
             mHandler.sendMessage(msg);
         }
@@ -125,7 +134,7 @@ public class ProgrammeUtilisateur implements RTRunnable
 	{
 		Message msg = mHandler.obtainMessage();
         msg = mHandler.obtainMessage();
-        msg.obj = new String("Configuration etape ("+etape+"/2)...");
+        msg.obj = new String("Configuration etape ("+(etape+1)+"/3)...");
         msg.arg2 = MESSAGE_PROGRESS;
         msg.arg1 = percent;
         mHandler.sendMessage(msg);

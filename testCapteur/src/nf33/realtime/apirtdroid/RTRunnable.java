@@ -19,6 +19,6 @@ public interface RTRunnable
 	//methode d'execution
 	public abstract void periodicEvent(long timeSinceLast, ArrayList<CapteurValue> capteursValues);
 	//methode appelée à la fin de la configuration
-	public abstract void endConfiguration(Boolean isRunable, Long frequence, Long wcet);
+	public abstract void endConfiguration(Boolean isRunable, Long periode, Long wcet);
 
 }

@@ -7,7 +7,7 @@ import nf33.realtime.apirtdroid.Tools;
 
 /**
  * @author Seg_fault_
- * 
+ * Thread d'execution deterministe
  */
 public class RTMainThread extends Thread
 {
@@ -20,14 +20,11 @@ public class RTMainThread extends Thread
 	private long frequenceAttendu;
 	//Classe de calcul utilisateur à executer
 	private RTRunnable _runnable;
-	//sauvegarde des log activé
-	private boolean _logActived;
-	//permet de bloquer l'attente de compensation
-	private boolean _noWait;
+
 	//fichier de log
 	private Logs _log;
 
-	
+	//gestionnaire de capteur
 	private CapteurManager _capteurManager;
 		
 	//constructeur
@@ -35,21 +32,9 @@ public class RTMainThread extends Thread
 	{
 		super();
 		this._runnable = _runnable;
-		_logActived = false;
-		_noWait = false;
 
 		_log = null;
-		_capteurManager = capteurManager;
-	}
-
-	//constructeur
-	public RTMainThread(RTRunnable _runnable, CapteurManager capteurManager, boolean activelog)
-	{
-		super();
-		this._runnable = _runnable;
-		_logActived = activelog;
-
-		if(_logActived)
+		if(Tools.isLogActived())
 		{
 			_log = new Logs();
 		}
@@ -71,9 +56,9 @@ public class RTMainThread extends Thread
 		long debutPeriode = 0;
 		long tempsCompensation = 0;
 
-		if(_logActived)
+		if(Tools.isLogActived())
 		{
-			_log.threaded_write("-----------Fichier log RTDroid-----------\n--Date début" + System.nanoTime() + "--\n--type d'attente" + Tools.typeWaitToString() + "--\n Attente compensation : " + !_noWait + "--\n");
+			_log.threaded_write("-----------Fichier log RTDroid-----------\n--Date début" + System.nanoTime() + "--\n--type d'attente" + Tools.typeWaitToString() + "--\n Attente compensation : " + Tools.isPendingCompensation() + "--\n");
 			_log.threaded_write(" durée max capteur : " + _maxDurationCap + "\nfréquence execution : " + frequenceAttendu);
 			_log.affiche_log(" durée max capteur : " + _maxDurationCap + " fréquence execution : " + frequenceAttendu);
 		}
@@ -108,7 +93,7 @@ public class RTMainThread extends Thread
 			
 			//date de capture des capteurs
 			dateCap = System.nanoTime(); 					//recupere le temps en nanoseconde
-			if(_logActived) //log
+			if(Tools.isLogActived()) //log
 			{
 				_log.threaded_write("Date capteur : " +Tools.timeToString(dateCap) );
 				_log.affiche_log("Date capteur : " +Tools.timeToString(dateCap) );
@@ -117,7 +102,7 @@ public class RTMainThread extends Thread
 			//recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
 			{
-				if(capteurUtilise.get(i).getLastSensorEvent() == null && _logActived) //log
+				if(capteurUtilise.get(i).getLastSensorEvent() == null && Tools.isLogActived()) //log
 				{
 					_log.threaded_write("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
 					_log.affiche_log("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
@@ -128,7 +113,7 @@ public class RTMainThread extends Thread
 				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
 			}
 			
-			if(_logActived)//log
+			if(Tools.isLogActived())//log
 			{
 				_log.threaded_write("Periode : " +Tools.timeToString(lastPeriode) + " precision : "+ ((double)lastPeriode/(double)(frequenceAttendu)));
 				_log.affiche_log("Periode : " +Tools.timeToString(lastPeriode) + " precision "+ ((double)lastPeriode/(double)(frequenceAttendu)));
@@ -141,14 +126,14 @@ public class RTMainThread extends Thread
 
 			//fin de l'execution du code utilisateur
 			finExeUtil = System.nanoTime();					
-			if(!_noWait)
+			if(Tools.isPendingCompensation())
 			{
 				//calcul du temps necessaire pour finir la periode
 				tempsCompensation = frequenceAttendu - (finExeUtil - debutPeriode); 
 				
 				if(tempsCompensation<0)//erreur, execution plus long que prévu
 				{
-					if(_logActived)
+					if(Tools.isLogActived())
 					{
 						_log.threaded_write("Erreur, exécution code util. trop long : " + Tools.timeToString(finExeUtil - debutExeUtil) + "au lieu de : "+ Tools.timeToString(frequenceAttendu-_maxDurationCap));
 						_log.affiche_log("Erreur, exécution code util. trop long :" + Tools.timeToString(finExeUtil - debutExeUtil)+ "au lieu de : "+ Tools.timeToString(frequenceAttendu-_maxDurationCap));
@@ -173,70 +158,13 @@ public class RTMainThread extends Thread
 		
 		}
 		
-		if(_logActived)
+		if(Tools.isLogActived())
 		{
 			_log.threaded_write("End execution, "+  System.nanoTime());
 			_log.affiche_log("End execution"+  System.nanoTime());
 			_log.closeLog();
 		}
 		_capteurManager.stopCapteurCapteur();
-	}
-
-	
-	public long get_maxDurationCapteur()
-	{
-		return _maxDurationCap;
-	}
-
-	public synchronized void set_maxDurationCapteur(long _maxDurationCapteur)
-	{
-		this._maxDurationCap = _maxDurationCapteur;
-	}
-
-	public long get_maxDurationExe()
-	{
-		return _maxDurationExe;
-	}
-
-	public synchronized void set_maxDurationExe(long _maxDurationExe)
-	{
-		this._maxDurationExe = _maxDurationExe;
-	}
-	public synchronized void setFrequenceAttendu(long frequenceAttendu)
-	{
-		this.frequenceAttendu = frequenceAttendu;
-	}
-	
-
-	
-	
-	public synchronized void set_logActived(boolean activelog)
-	{
-		_logActived = activelog;
-		if(_logActived)
-		{
-			_log = new Logs();
-		}
-		else if(_log != null)
-		{
-			_log.closeLog();
-			_log = null;
-		}
-	}
-	
-	public boolean get_logActived()
-	{
-		return _logActived;
-	}
-
-	public boolean isNoWait()
-	{
-		return _noWait;
-	}
-
-	public synchronized void setNoWait(boolean noWait)
-	{
-		this._noWait = noWait;
 	}
 
 	// Simulation du code API, retourne le temps necessaire (WCET-API)
@@ -287,7 +215,7 @@ public class RTMainThread extends Thread
 
 			// date de capture des capteurs
 			dateCap = System.nanoTime(); // recupere le temps en nanoseconde
-			if (_logActived) // log
+			if (Tools.isLogActived()) // log
 			{
 				_log.threaded_write("/INIT/Date capteur : " + Tools.timeToString(dateCap));
 				_log.affiche_log("/INIT/Date capteur : " + Tools.timeToString(dateCap));
@@ -296,7 +224,7 @@ public class RTMainThread extends Thread
 			// recuperation des données capteurs
 			for (int i = 0; i < capteurUtilise.size(); i++)
 			{
-				if (capteurUtilise.get(i).getLastSensorEvent() == null && _logActived) // log
+				if (capteurUtilise.get(i).getLastSensorEvent() == null && Tools.isLogActived()) // log
 				{
 					_log.threaded_write("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
 					_log.affiche_log("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
@@ -310,7 +238,7 @@ public class RTMainThread extends Thread
 				}
 			}
 
-			if (_logActived)// log
+			if (Tools.isLogActived())// log
 			{
 				_log.threaded_write("/INIT/Periode : " + Tools.timeToString(lastPeriode) + " precision : "
 						+ ((double) lastPeriode / (double) (frequenceAttendu)));
@@ -360,4 +288,31 @@ public class RTMainThread extends Thread
 		return endTimeExe - beginTimeExe;
 
 	}
+	
+	
+
+	public long get_maxDurationCapteur()
+	{
+		return _maxDurationCap;
+	}
+
+	public synchronized void set_maxDurationCapteur(long _maxDurationCapteur)
+	{
+		this._maxDurationCap = _maxDurationCapteur;
+	}
+
+	public long get_maxDurationExe()
+	{
+		return _maxDurationExe;
+	}
+
+	public synchronized void set_maxDurationExe(long _maxDurationExe)
+	{
+		this._maxDurationExe = _maxDurationExe;
+	}
+	public synchronized void setFrequenceAttendu(long frequenceAttendu)
+	{
+		this.frequenceAttendu = frequenceAttendu;
+	}
+	
 }

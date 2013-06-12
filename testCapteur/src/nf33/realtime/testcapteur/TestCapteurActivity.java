@@ -79,6 +79,14 @@ public class TestCapteurActivity extends Activity
             		_chargement.setProgress(msg.arg1);
                 }
                 break;
+            case ProgrammeUtilisateur.MESSAGE_ENDEXETEST:
+            	if(configure)
+            	{
+            		isStarted = _rtdroid.stop();
+    	            allowConfiguration();
+    	            texteInfoBas.setText(message);
+            	}
+            	break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
             	 _chargement.dismiss();
             	if(msg.arg1 == 0)
@@ -188,7 +196,6 @@ public class TestCapteurActivity extends Activity
 	        if (isStarted)
 	        {
 	            isStarted = _rtdroid.stop();
-	            texteprecision.setText("");
 	            allowConfiguration();
 	            
 	        }
@@ -216,7 +223,7 @@ public class TestCapteurActivity extends Activity
     
     public void allowConfiguration()
     {
-    	 texteprecision.setText("Entrez une periode en milliseconde puis configuez");
+    	 texteprecision.setText("Entrez une période en milliseconde puis configuez");
     	 texteInfoCentre.setText("");
     	 texteInfoBas.setText("");
          _boutonConfig.setEnabled(true);
@@ -238,7 +245,6 @@ public class TestCapteurActivity extends Activity
              }
              ++i;
          }
-         Log.d("DADU", "debut declare");
         _rtdroid.declare(programmeUtilisateur, listeCapteur, freqDemande);
     }
     
@@ -253,6 +259,8 @@ public class TestCapteurActivity extends Activity
 	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 	        	imm.hideSoftInputFromWindow(_frequenceDem.getWindowToken(), 0);
 				texteprecision.setText("");
+		    	 texteInfoCentre.setText("");
+		    	 texteInfoBas.setText("");
 				_chargement.setMessage("Configuration en cours...");
 				_boutonConfig.setEnabled(false);
 				

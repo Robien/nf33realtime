@@ -18,25 +18,30 @@ public final class Tools
 	public static final int WAIT_NANO = 1;
 	// sleep actif
 	public static final int WAIT_ACTIVE = 2;
-	public static int type_wait = WAIT_NANO;
+	//Type d'attente
+	private static int _type_wait = WAIT_NANO;
+	// pas d'attente de compensation
+	private static boolean _pendingCompensation = true;
 
-	public static final int nbIterationWCETUtilisateur = 1000;
-	public static final int nbIterationWCETAPI = 20;
+	//Constante nombre d'iteration du pendant le calcul du WCET
+	public static final int NB_ITER_WCET_UTIL = 1000;
+	public static final int NB_ITER_WCET_API = 20;
+	public static final int MAX_WAIT_WCET_CAPTEUR = 10000;
+	
+	//sauvegarde des log activé
+	private static boolean _logActived = false;
 	
 	// endore le thead pendant x nanoseconde
 	static public void nanoWait(long nanos) throws InterruptedException
 	{
 
-		Thread.sleep(toMilli(nanos), remainderNano(nanos)); // attend la fin de
-															// la fenetre de
-															// capture des
-															// données capteurs
+		Thread.sleep(toMilli(nanos), remainderNano(nanos)); // attend la fin de la fenetre de capture des données capteurs
 	}
 
 	// endore le thread pendant x nanoseconde
 	static public void waitTime(long nanos) throws InterruptedException
 	{
-		switch (type_wait)
+		switch (_type_wait)
 		{
 		case WAIT_MILLI:
 			Thread.sleep(toMilli(nanos));
@@ -60,7 +65,7 @@ public final class Tools
 	// simule l'endormissement le thread pendant x nanoseconde
 	static public void simulewaitTime(long nanos) 
 	{
-		switch (type_wait)
+		switch (_type_wait)
 		{
 		case WAIT_MILLI:
 			toMilli(nanos);
@@ -90,13 +95,13 @@ public final class Tools
 	// convertie une date en nanoseconde en string
 	static public String timeToString(long nano)
 	{
-		return "(" + toMilli(nano) + "ms" + remainderNano(nano) + "ns)";
+		return "(" + toMilli(nano) + "ms " + remainderNano(nano) + "ns)";
 	}
 
 	// convertie le type de précision en string
 	static public String typeWaitToString()
 	{
-		switch (type_wait)
+		switch (_type_wait)
 		{
 		case WAIT_MILLI:
 			return "WAIT_MILLI";
@@ -107,4 +112,36 @@ public final class Tools
 		}
 	}
 
+	public static int getTypeWait()
+	{
+		return _type_wait;
+	}
+
+	public static void setTypeWait(int typewait)
+	{
+		Tools._type_wait = typewait;
+	}
+
+	public static boolean isLogActived()
+	{
+		return _logActived;
+	}
+
+	public static void setLogActived(boolean logActived)
+	{
+		Tools._logActived = logActived;
+	}
+
+	public static boolean isPendingCompensation()
+	{
+		return _pendingCompensation;
+	}
+
+	public static void setPendingCompensation(boolean pending_compensation)
+	{
+		Tools._pendingCompensation = pending_compensation;
+	}
+	
+	
+ 
 }
