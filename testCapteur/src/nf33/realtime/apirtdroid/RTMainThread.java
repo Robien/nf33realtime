@@ -328,7 +328,7 @@ public class RTMainThread extends Thread
 
 			// fin de l'execution du code utilisateur
 			finExeUtil = System.nanoTime();
-			if (!_noWait)
+			/*if (!_noWait)
 			{
 				// calcul du temps necessaire pour finir la periode
 				tempsCompensation = frequenceAttendu - (finExeUtil - debutPeriode);
@@ -345,9 +345,9 @@ public class RTMainThread extends Thread
 				}
 
 				// Attente de la fin de la periode d'execution
-				//Tools.simulewaitTime(tempsCompensation);
+				Tools.simulewaitTime(tempsCompensation);
 
-			}
+			}*/
 			// calcul de la periode reel de la dernier boucle
 			lastPeriode = System.nanoTime() - debutPeriode;
 			// debut de la nouvelle periode
