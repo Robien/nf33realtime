@@ -79,14 +79,14 @@ public class ProgrammeUtilisateur implements RTRunnable
 			msg.arg2 = MESSAGE_PERIODE;
 			sommePrecision += ((double) timeSinceLast / (double) (frequenceAttendu));
 			nbPrecision++;
-			msg.obj = new String("précision : " + ((float) timeSinceLast / (float) (frequenceAttendu)));
+			msg.obj = new String("Précision : " + ((float) timeSinceLast / (float) (frequenceAttendu)));
 			msg.arg1 = (int) (sommePrecision*1000000000/nbPrecision);
 			mHandler.sendMessage(msg);
-			if(nbPrecision>=200)
+			if(nbPrecision>=100)
 			{
 				msg = mHandler.obtainMessage();
 				msg.arg2 = MESSAGE_ENDEXETEST;
-				msg.obj = new String("fin exécution (200fois)\nprécision moyenne : "+  (sommePrecision*100.0/nbPrecision));
+				msg.obj = new String("Fin exécution (100fois)\nPrécision moyenne : "+  (sommePrecision*100.0/nbPrecision));
 				mHandler.sendMessage(msg);
 			}
 		}
