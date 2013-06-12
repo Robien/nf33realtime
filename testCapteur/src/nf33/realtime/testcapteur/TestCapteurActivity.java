@@ -57,7 +57,7 @@ public class TestCapteurActivity extends Activity
                 {
                 	texteprecision.setText(message);
                 	double moyen = (double)msg.arg1/(double)10000000;
-                	texteInfoBas.setText("Moyen précision : " + moyen);
+                	texteInfoBas.setText("Moyenne précision : " + moyen);
                 }
                 break;
             case ProgrammeUtilisateur.MESSAGE_CAPTEUR:
