@@ -18,7 +18,6 @@ import android.util.Log;
 public final class RTDroid
 {
 
-	private Activity activity;
 	private CapteurManager capteurManager;
 	
 	private RTRunnable runnable; // a changer par un tableau pour pouvoir appeller
@@ -42,7 +41,6 @@ public final class RTDroid
 	
 	public RTDroid(Activity activity)
 	{
-		this.activity = activity;
 		capteurManager = new CapteurManager(activity);
 		//capteursUtilise = new ArrayList<Capteur>();
 		configurationEnCours = 0;

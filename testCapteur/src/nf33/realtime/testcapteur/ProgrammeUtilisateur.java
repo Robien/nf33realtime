@@ -2,20 +2,16 @@ package nf33.realtime.testcapteur;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
+import nf33.realtime.apirtdroid.CapteurValue;
+import nf33.realtime.apirtdroid.RTRunnable;
+import nf33.realtime.apirtdroid.Tools;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import nf33.realtime.apirtdroid.CapteurValue;
-import nf33.realtime.apirtdroid.RTDroid;
-import nf33.realtime.apirtdroid.RTRunnable;
-import nf33.realtime.apirtdroid.Tools;
 
 public class ProgrammeUtilisateur implements RTRunnable
 {
     private Handler mHandler;
-    private RTDroid rtdroid;
    
     //type de message envoyé a l'interface
     public static final int MESSAGE_CAPTEUR = 2;
@@ -31,9 +27,8 @@ public class ProgrammeUtilisateur implements RTRunnable
     private boolean executionStarted = false;
     
    
-    ProgrammeUtilisateur(RTDroid rtdroid, Handler handler)
+    ProgrammeUtilisateur(Handler handler)
     {
-        this.rtdroid = rtdroid;
         mHandler = handler;
     }
    

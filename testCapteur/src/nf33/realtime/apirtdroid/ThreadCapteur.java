@@ -1,6 +1,5 @@
 package nf33.realtime.apirtdroid;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.util.Log;

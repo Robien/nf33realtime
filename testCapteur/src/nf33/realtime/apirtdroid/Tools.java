@@ -71,6 +71,7 @@ public final class Tools
 			toMilli(nanos);
 			break;
 		case WAIT_ACTIVE:
+			@SuppressWarnings("unused") //non utlisé parce que c'est une simmulation
 			long waitDate = System.nanoTime() + nanos;
 			break;
 		default:

@@ -1,7 +1,6 @@
 package nf33.realtime.apirtdroid;
 
 import android.hardware.SensorEvent;
-import android.util.Log;
 
 
 public class CapteurValue
