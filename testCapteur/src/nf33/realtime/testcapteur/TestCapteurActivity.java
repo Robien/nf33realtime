@@ -72,6 +72,12 @@ public class TestCapteurActivity extends Activity
             		texteInfoCentre.setText(message);
                 }
                 break;
+            case ProgrammeUtilisateur.MESSAGE_PROGRESS:
+            	if(!configure)
+                {
+            		texteInfoCentre.setText(message);
+                }
+                break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
             	 _chargement.dismiss();
             	if(msg.arg1 == 0)

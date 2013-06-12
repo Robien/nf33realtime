@@ -16,9 +16,11 @@ public class ProgrammeUtilisateur implements RTRunnable
     private Handler mHandler;
     private RTDroid rtdroid;
    
+    //type de message envoyé a l'interface
     public static final int MESSAGE_RECORD = 2;
     public static final int MESSAGE_PERIODE = 1;
     public static final int MESSAGE_FINCONFIG = 0;
+    public static final int MESSAGE_PROGRESS = 3;
    
     private long frequenceAttendu = 1;
     
@@ -117,6 +119,12 @@ public class ProgrammeUtilisateur implements RTRunnable
         }
 
     }
+
+	@Override
+	public void progressConfiguration(int etape, int percent)
+	{
+				
+	}
 
 
 
