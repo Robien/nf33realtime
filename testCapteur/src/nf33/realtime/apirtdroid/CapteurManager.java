@@ -274,15 +274,20 @@ public class CapteurManager implements SensorEventListener
 	
 	public ArrayList<Capteur> getListeCapteurUtilise()
 	{
-		ArrayList<Capteur> listCateurs = new ArrayList<Capteur>();
+		Log.d("DADU", "1.1");
+		ArrayList<Capteur> listCapteurs = new ArrayList<Capteur>();
+		Log.d("DADU", "1.2");
 		for (Capteur capteur : capteurs)
 		{
+			Log.d("DADU", "1.3");
 			if (capteur.isUsed())
 			{
-				listCateurs.add(capteur);
+				Log.d("DADU", "1.4");
+				listCapteurs.add(capteur);
 			}
 		}
-		return listCateurs;
+		Log.d("DADU", "1.5");
+		return listCapteurs;
 	}
 	
 }

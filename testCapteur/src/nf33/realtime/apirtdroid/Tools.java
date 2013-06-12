@@ -11,7 +11,7 @@ package nf33.realtime.apirtdroid;
 public final class Tools
 {
 	// Conversion de Nanoseconde a Milliseconde
-	static final float convertNanoToMilli = 1000000;
+	private static final float convertNanoToMilli = 1000000;
 	// sleep android milli
 	public static final int WAIT_MILLI = 0;
 	// sleep android milli + nano
@@ -20,6 +20,9 @@ public final class Tools
 	public static final int WAIT_ACTIVE = 2;
 	public static int type_wait = WAIT_NANO;
 
+	public static final int nbIterationWCETUtilisateur = 500;
+	public static final int nbIterationWCETAPI = 100;
+	
 	// endore le thead pendant x nanoseconde
 	static public void nanoWait(long nanos) throws InterruptedException
 	{

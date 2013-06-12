@@ -50,15 +50,22 @@ public class ThreadCapteur extends Thread
 //		capteurManager.stopMesure();
 		Long maxCapteurWait = capteurManager.getPeriodeMax();
 		
-		Log.d("DADU", "Début du calcul du WCET");
+		Log.d("DADU", "Début du calcul du WCET !");
 		ArrayList<Capteur> listeCapteurUtilise = capteurManager.getListeCapteurUtilise();
+		Log.d("DADU", "1");
 		ArrayList<CapteurValue> listeCapteurValue = new ArrayList<CapteurValue>();
+		Log.d("DADU", "2");
 		for (int i = 0; i < listeCapteurUtilise.size();++i)
 		{
+			Log.d("DADU", "3");
 			listeCapteurValue.add(listeCapteurUtilise.get(i).getCapteurValue());
 		}
+		Log.d("DADU", "4");
 		Long total = 0l;
-		for (int i = 0; i < 10; ++i)
+		int progression = -1;
+		programmeUtilisateur.progressConfiguration(1, 0);
+		Log.d("DADU", "Début du calcul du WCET boucle");
+		for (int i = 0; i < Tools.nbIterationWCETUtilisateur; ++i)
 		{
 			for (int j = 0; j < listeCapteurUtilise.size(); j++)
 			{
@@ -71,18 +78,32 @@ public class ThreadCapteur extends Thread
 			{
 				total = tmp;
 			}
+			if ((int)((i*100)/ Tools.nbIterationWCETUtilisateur) != progression)
+			{
+				progression = (int)((i*100)/ Tools.nbIterationWCETUtilisateur);
+				programmeUtilisateur.progressConfiguration(1, progression);
+			}
 		}
 		Long wcetUtilisateur = total;
+		
 		Long wcetAPI = 0l;
 		Log.d("DADU", "Debut calcul WCETAPI");
-		for (int i = 0; i < 10; ++i)
+		progression = -1;
+		programmeUtilisateur.progressConfiguration(2, 0);
+		for (int i = 0; i < Tools.nbIterationWCETAPI; ++i)
 		{
 			Long tmp = mainThread.voidRun(maxCapteurWait);
 			if (wcetAPI < tmp)
 			{
 				wcetAPI = tmp;
 			}
+			if ((int)((i*100)/ Tools.nbIterationWCETAPI) != progression)
+			{
+				progression = (int)((i*100)/ Tools.nbIterationWCETAPI);
+				programmeUtilisateur.progressConfiguration(2, progression);
+			}
 		}
+		programmeUtilisateur.progressConfiguration(2, 100);
 		
 		Log.d("DADU", "WCET API : " + wcetAPI);
 		total += wcetAPI;

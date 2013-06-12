@@ -1,6 +1,7 @@
 package nf33.realtime.apirtdroid;
 
 import android.hardware.SensorEvent;
+import android.util.Log;
 
 
 public class CapteurValue
@@ -82,10 +83,12 @@ public class CapteurValue
 	
 	public void setRandomValues()
 	{
-		for (int i = 0; i < _values.length;i++)
-		{
-			_values[i] = (float) (Math.random()*(-Float.MIN_VALUE + Float.MAX_VALUE) - Float.MIN_VALUE);
-		}
+		Log.d("DADU", "rand !");
+//		for (int i = 0; i < _values.length;i++)
+//		{
+//			Log.d("DADU", "rand2");
+//			_values[i] = (float) (Math.random()*(-Float.MIN_VALUE + Float.MAX_VALUE) - Float.MIN_VALUE);
+//		}
 	}
 	
 }
