@@ -219,7 +219,6 @@ public class CapteurManager implements SensorEventListener
 			{
 				delaisCapteursMax.set(idCapteurCourant, delais);
 				capteurCourant.setMaxPeriode(delais);
-				// activity.newMax(delais);
 			}
 			Log.d("MESURE", delais + "");
 		}
@@ -234,14 +233,11 @@ public class CapteurManager implements SensorEventListener
 				}
 			}
 		}
-		// String chaine = new String("delais : " + delais + "ns");
-		// fichier.write(chaine);
 	}
 
 	private void start()
 	{
-
-		// fichier.openFile();
+		lastTimestamp = System.nanoTime();
 		sensorManager.registerListener(this, capteurCourant.getSensor(), SensorManager.SENSOR_DELAY_FASTEST);
 	}
 
