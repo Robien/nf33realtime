@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -39,7 +41,6 @@ public class TestCapteurActivity extends Activity
     //etat de l'application
     private boolean configure = false;
     //etat de l'application
-    private boolean configureOk = true;
     private boolean isStarted = false;
     
     //etat de la barre de progression
@@ -52,7 +53,7 @@ public class TestCapteurActivity extends Activity
     {
         @Override
         public void handleMessage(Message msg)
-        {
+        {	
             super.handleMessage(msg);
             String message = (String) msg.obj;
             switch (msg.arg2)
@@ -68,9 +69,8 @@ public class TestCapteurActivity extends Activity
                 textebasgeneral.setText("Moyen précision : " + msg.arg1);
                 break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
-            	Log.d("DADU", "MESSAGEFINCONFIG");
             	 //_chargement.dismiss();
-            	if(!configureOk)
+            	if(msg.arg1 == 0)
             	{
             		Toast.makeText(getApplicationContext(), "La periode est impossible", Toast.LENGTH_LONG ).show();
                     allowConfiguration();
@@ -108,7 +108,7 @@ public class TestCapteurActivity extends Activity
         
         //edit texte pour recuperer la valeur de la frequence
         _frequenceDem = (EditText) findViewById(R.id.numEditFre);
-        
+        _frequenceDem.setText("0");
         //zone de texte
         texte = (TextView)findViewById(R.id.infocapteurs);
         texteinfogeneral = (TextView)findViewById(R.id.info);
@@ -169,12 +169,14 @@ public class TestCapteurActivity extends Activity
 	        {
 	            isStarted = _rtdroid.stop();
 	            texteinfogeneral.setText("");
-	            _boutonConfig.setEnabled(true);
+	            allowConfiguration();
+	            
 	        }
 	        else
 	        {
 	            isStarted = _rtdroid.launch();
 	            texteinfogeneral.setText("");
+	            
 	            _boutonConfig.setEnabled(false);
 	        }
 	       
@@ -196,12 +198,13 @@ public class TestCapteurActivity extends Activity
     {
     	 texteinfogeneral.setText("");
          _boutonConfig.setEnabled(true);
+         _boutonExe.setEnabled(false);
          configure = false;
     }
     
-    public boolean selectionCapteur(long freqDemande)
+    public void selectionCapteur(long freqDemande)
     {	
-    	_rtdroid.init(); // debut de l'initialisation
+    	
          ArrayList<Capteur> listeCapteur = new ArrayList<Capteur>();
          int i = 0;
          while(i < _rtdroid.getCapteurManager().getListeCapteurs().size() )
@@ -214,7 +217,7 @@ public class TestCapteurActivity extends Activity
              ++i;
          }
          Log.d("DADU", "debut declare");
-        return _rtdroid.declare(programmeUtilisateur, listeCapteur, freqDemande);
+        _rtdroid.declare(programmeUtilisateur, listeCapteur, freqDemande);
     }
     
     public class BoutonConfig implements View.OnClickListener
@@ -225,10 +228,11 @@ public class TestCapteurActivity extends Activity
 		{
 	        if (!configure)
 	        {
+	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+	        	imm.hideSoftInputFromWindow(_frequenceDem.getWindowToken(), 0);
 				texteinfogeneral.setText("Configuration...");
 				_chargement.setMessage("Configuration en cours");
 				_boutonConfig.setEnabled(false);
-
 				// lancer configuration
 				
 				float valeur;
@@ -241,17 +245,15 @@ public class TestCapteurActivity extends Activity
 					_frequenceDem.setText("1000");
 					valeur = 1000;
 				}
-				
-				if (valeur <= 0)
+
+				if (valeur >= 0)
 				{
-					
-					Log.d("DADU", "valeur :" + (long) (1000000 * valeur) + "  valeurok : "+configureOk);
-					configureOk = selectionCapteur((long) (1000000 * valeur));
-					Log.d("DADU", "fin declare");
+					selectionCapteur((long) (1000000 * valeur));
 				}
 				else
 				{
-					configureOk = false;
+					Toast.makeText(getApplicationContext(), "La periode est impossible", Toast.LENGTH_LONG ).show();
+                    allowConfiguration();
 				}
 				//_chargement.show();
 	        }

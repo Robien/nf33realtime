@@ -241,7 +241,7 @@ public class RTMainThread extends Thread
 	}
 
 	// Simulation du code API, retourne le temps necessaire (WCET-API)
-	public long voidRun()
+	public long voidRun(long maxCapteurwait)
 	{
 		// initialisation des variable necessaire à la fonction
 		long debutExeUtil = 0; // stock le temps du début de l'execution (en nano)
@@ -269,7 +269,7 @@ public class RTMainThread extends Thread
 		try
 		{
 			// attent qu'une valeur soit recuperé
-			Tools.waitTime(_maxDurationCap);
+			Tools.waitTime(maxCapteurwait);
 		}
 		catch (InterruptedException e)
 		{
@@ -284,7 +284,7 @@ public class RTMainThread extends Thread
 		if (true)
 		{
 			// Attente de la fin de la periode de capture
-			Tools.simulewaitTime(_maxDurationCap);
+			Tools.simulewaitTime(maxCapteurwait);
 
 			// date de capture des capteurs
 			dateCap = System.nanoTime(); // recupere le temps en nanoseconde
@@ -302,10 +302,13 @@ public class RTMainThread extends Thread
 					_log.threaded_write("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
 					_log.affiche_log("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
 				}
-				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
-				capteursValues.get(i).setTimestampCaptureApi(dateCap);
-				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
-				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
+				else
+				{
+					capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
+					capteursValues.get(i).setTimestampCaptureApi(dateCap);
+					capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+					capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
+				}
 			}
 
 			if (_logActived)// log

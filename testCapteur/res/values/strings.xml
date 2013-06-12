@@ -10,4 +10,5 @@
     <string name="boutonStart">Start Execution</string>
     <string name="boutonStop">Stop Execution</string>
     <string name="boutonConfigurationStart">Configure</string>
+    <string name="unit">ms</string>
 </resources>

@@ -38,7 +38,7 @@ public class ProgrammeUtilisateur implements RTRunnable
     private int mShakeCount = 0;
     private long mLastShake;
     private long mLastForce;
-    private long frequenceAttendu = 0;
+    private long frequenceAttendu = 1;
     
     private double sommePrecision = 0;
     private float nbPrecision =0;
@@ -55,11 +55,20 @@ public class ProgrammeUtilisateur implements RTRunnable
     @Override
     public void endConfiguration(Boolean isRunable, Long frequence, Long wcet)
     {
-    	frequenceAttendu = frequence;
-        Message msg = mHandler.obtainMessage();
-        msg.obj = new String("Configuration terminée\nfrequence : "+frequence+ "\nwcet : "+ wcet);
-        msg.arg2 = MESSAGE_FINCONFIG;
-        mHandler.sendMessage(msg);
+		frequenceAttendu = frequence;
+		Message msg = mHandler.obtainMessage();
+		msg.obj = new String("Configuration terminée\nfrequence : " + frequence + "\nwcet : " + wcet);
+		msg.arg2 = MESSAGE_FINCONFIG;
+		if (isRunable)
+		{
+			msg.arg1 = 1;
+		}
+		else
+		{
+			msg.arg1 = 0;
+		}
+
+		mHandler.sendMessage(msg);
        
     }
 

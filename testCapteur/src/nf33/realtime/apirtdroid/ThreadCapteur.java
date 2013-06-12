@@ -45,7 +45,7 @@ public class ThreadCapteur extends Thread
 		}
 		while (capteurManager.nextCapteur());
 //		capteurManager.stopMesure();
-		Long max = capteurManager.getPeriodeMax();
+		Long maxCapteurWait = capteurManager.getPeriodeMax();
 		
 		Log.d("DADU", "Début du calcul du WCET");
 		Long total = 0l;
@@ -61,9 +61,10 @@ public class ThreadCapteur extends Thread
 		}
 		Long wcetUtilisateur = total;
 		Long wcetAPI = 0l;
+		Log.d("DADU", "Debut calcul WCETAPI");
 		for (int i = 0; i < 10; ++i)
 		{
-			Long tmp = mainThread.voidRun();
+			Long tmp = mainThread.voidRun(maxCapteurWait);
 			if (wcetAPI < tmp)
 			{
 				wcetAPI = tmp;
@@ -73,17 +74,17 @@ public class ThreadCapteur extends Thread
 		Log.d("DADU", "WCET API : " + wcetAPI);
 		total += wcetAPI;
 		
-		Log.d("DADU", "periode demandé : " + periodeDemande + " max capteur : " + max + " wcet total " + total + " wcet + capteurs " + (max + total));
+		Log.d("DADU", "periode demandé : " + periodeDemande + " max capteur : " + maxCapteurWait + " wcet total " + total + " wcet + capteurs " + (maxCapteurWait + total));
 		Log.d("DADU", "wcetUtilisateur : " + (total-wcetAPI) + " - " + wcetUtilisateur);
-		if (periodeDemande >=  max + total)
+		if (periodeDemande >=  maxCapteurWait + total)
 		{
-			rtdroid.endConfiguration(true, periodeDemande, wcetAPI, periodeDemande-max-wcetAPI, max);
+			rtdroid.endConfiguration(true, periodeDemande, wcetAPI, periodeDemande-maxCapteurWait-wcetAPI, maxCapteurWait);
 			programmeUtilisateur.endConfiguration(true, periodeDemande, total);
 		}
 		else if (periodeDemande == 0)
 		{
-			rtdroid.endConfiguration(true, max+total, wcetAPI, total-wcetAPI, max);
-			programmeUtilisateur.endConfiguration(true, max + total, total);
+			rtdroid.endConfiguration(true, maxCapteurWait+total, wcetAPI, total-wcetAPI, maxCapteurWait);
+			programmeUtilisateur.endConfiguration(true, maxCapteurWait + total, total);
 		}
 		else
 		{

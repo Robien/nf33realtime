@@ -44,17 +44,13 @@ public final class RTDroid
 	public RTDroid(Activity activity)
 	{
 		this.activity = activity;
-		configurationEnCours = 0;
-	}
-	
-	public void init()
-	{
 		capteurManager = new CapteurManager(activity);
 		//capteursUtilise = new ArrayList<Capteur>();
 		configurationEnCours = 0;
 	}
+	
 
-	public Boolean declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)
+	public void declare(RTRunnable runnable, List<Capteur> listCapteurs, Long periodeDemande)
 	{
 
 		this.runnable = runnable;
@@ -71,11 +67,10 @@ public final class RTDroid
 		for (Capteur capteur : listCapteurs)
 		{
 			capteur.setIsUsed(true);
-			Log.d("DADU", "boucle capteur : " + capteur.getSensor().getType() + " id : " + capteur.getId());
+			//Log.d("DADU", "boucle capteur : " + capteur.getSensor().getType() + " id : " + capteur.getId());
 		}
 		
 		mutexConfigurationEnCours = new ReentrantLock();
-		
 		mutexConfigurationEnCours.lock();
 		configurationEnCours++;
 		mutexConfigurationEnCours.unlock();
@@ -84,7 +79,7 @@ public final class RTDroid
 		Tools.type_wait = Tools.WAIT_ACTIVE;
 		threadCapteur = new ThreadCapteur(capteurManager, runnable, this, periodeDemande, _threadPrincipal);
 		threadCapteur.start();
-		return null;
+		
 	}
 
 	public Boolean launch()
@@ -125,6 +120,7 @@ public final class RTDroid
 	
 	public void endConfiguration(Boolean isPossible, Long periode, Long wcetAPI, Long wcetUtilisateur, Long maxCapteur)
 	{
+		Log.d("DADU", "endconfig rtdroid");
 		mutexConfigurationEnCours.lock();
 		configurationEnCours--;
 		mutexConfigurationEnCours.unlock();
@@ -134,6 +130,7 @@ public final class RTDroid
 		 this.wcetAPI = wcetAPI;
 		 this.wcetUtilisateur = wcetUtilisateur;
 		 this.maxCapteur = maxCapteur;
+		 
 	}
 	
 	
