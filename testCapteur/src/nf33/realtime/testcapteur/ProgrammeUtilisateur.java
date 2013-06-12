@@ -50,7 +50,7 @@ public class ProgrammeUtilisateur implements RTRunnable
     {
 		frequenceAttendu = periode;
 		Message msg = mHandler.obtainMessage();
-		msg.obj = new String("Configuration terminée\nPériode : " + Tools.timeToString(periode) + "\nWCET : " + wcet);
+		msg.obj = new String("Configuration terminée\nPériode : " + Tools.timeToString(periode) + "\nWCET : " +Tools.timeToString(wcet));
 		msg.arg2 = MESSAGE_FINCONFIG;
 		if (isRunable)
 		{
