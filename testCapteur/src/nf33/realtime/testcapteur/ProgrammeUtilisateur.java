@@ -17,7 +17,7 @@ public class ProgrammeUtilisateur implements RTRunnable
     private RTDroid rtdroid;
    
     //type de message envoyé a l'interface
-    public static final int MESSAGE_RECORD = 2;
+    public static final int MESSAGE_CAPTEUR = 2;
     public static final int MESSAGE_PERIODE = 1;
     public static final int MESSAGE_FINCONFIG = 0;
     public static final int MESSAGE_PROGRESS = 3;
@@ -101,7 +101,7 @@ public class ProgrammeUtilisateur implements RTRunnable
                 	Message msg = mHandler.obtainMessage();
                     msg = mHandler.obtainMessage();
                     msg.obj = new String("Nouvelle valeur\nx:"+ capteursValues.get(i).getValues()[SensorManager.DATA_X] +"\ny:"+capteursValues.get(i).getValues()[SensorManager.DATA_Y] +"\nz:"+ capteursValues.get(i).getValues()[SensorManager.DATA_Z]);
-                    msg.arg2 = MESSAGE_RECORD;
+                    msg.arg2 = MESSAGE_CAPTEUR;
                     mHandler.sendMessage(msg);
                    
                    
@@ -114,7 +114,7 @@ public class ProgrammeUtilisateur implements RTRunnable
         	Message msg = mHandler.obtainMessage();
             msg = mHandler.obtainMessage();
             msg.obj = new String("TestMethode\n");
-            msg.arg2 = MESSAGE_RECORD;
+            msg.arg2 = MESSAGE_CAPTEUR;
             mHandler.sendMessage(msg);
         }
 
@@ -123,7 +123,12 @@ public class ProgrammeUtilisateur implements RTRunnable
 	@Override
 	public void progressConfiguration(int etape, int percent)
 	{
-				
+		Message msg = mHandler.obtainMessage();
+        msg = mHandler.obtainMessage();
+        msg.obj = new String("Configuration etape ("+etape+"/2)...");
+        msg.arg2 = MESSAGE_PROGRESS;
+        msg.arg1 = percent;
+        mHandler.sendMessage(msg);
 	}
 
 

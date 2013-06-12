@@ -66,7 +66,7 @@ public class TestCapteurActivity extends Activity
                 	texteInfoBas.setText("Moyen précision : " + moyen);
                 }
                 break;
-            case ProgrammeUtilisateur.MESSAGE_RECORD:
+            case ProgrammeUtilisateur.MESSAGE_CAPTEUR:
             	if(configure)
                 {
             		texteInfoCentre.setText(message);
@@ -75,7 +75,8 @@ public class TestCapteurActivity extends Activity
             case ProgrammeUtilisateur.MESSAGE_PROGRESS:
             	if(!configure)
                 {
-            		texteInfoCentre.setText(message);
+            		_chargement.setMessage(message);
+            		_chargement.setProgress(msg.arg1);
                 }
                 break;
             case ProgrammeUtilisateur.MESSAGE_FINCONFIG:
@@ -125,7 +126,10 @@ public class TestCapteurActivity extends Activity
         texteInfoBas = (TextView)findViewById(R.id.infocomplementaire);
         
         //zone de chargement
-        _chargement = new ProgressDialog(this);
+        _chargement = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
+        //changement du style 
+        _chargement.setTitle("Configuration");
+        _chargement.setMax(100);
         
         //activer la configuration
         allowConfiguration();
@@ -242,8 +246,8 @@ public class TestCapteurActivity extends Activity
 	        {
 	        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 	        	imm.hideSoftInputFromWindow(_frequenceDem.getWindowToken(), 0);
-				texteprecision.setText("Configuration...");
-				_chargement.setMessage("Configuration en cours");
+				texteprecision.setText("");
+				_chargement.setMessage("Configuration en cours...");
 				_boutonConfig.setEnabled(false);
 				
 				// lancer configuration
