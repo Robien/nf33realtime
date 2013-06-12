@@ -338,23 +338,20 @@ public class RTMainThread extends Thread
 				{
 					if (_logActived)
 					{
-						_log.threaded_write("/INIT/Erreur, exécution code util. trop long : " + Tools.timeToString(finExeUtil - debutExeUtil)
-								+ "au lieu de : " + Tools.timeToString(frequenceAttendu - _maxDurationCap));
-						_log.affiche_log("/INIT/Erreur, exécution code util. trop long :" + Tools.timeToString(finExeUtil - debutExeUtil)
-								+ "au lieu de : " + Tools.timeToString(frequenceAttendu - _maxDurationCap));
+						_log.threaded_write("/INIT/");
+						_log.affiche_log("/INIT/");
 					}
 					tempsCompensation = 0;
 				}
 
 				// Attente de la fin de la periode d'execution
-				Tools.simulewaitTime(tempsCompensation);
+				//Tools.simulewaitTime(tempsCompensation);
 
 			}
 			// calcul de la periode reel de la dernier boucle
 			lastPeriode = System.nanoTime() - debutPeriode;
 			// debut de la nouvelle periode
-			debutPeriode = System.nanoTime(); // recupere le temps en
-												// nanoseconde
+			debutPeriode = System.nanoTime(); 
 
 		}
 		// recuperation du temps de la fin de la fonction a simuler
