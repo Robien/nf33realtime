@@ -68,7 +68,7 @@ public class RTMainThread extends Thread
 		ArrayList<Capteur> capteurUtilise = _capteurManager.getListeCapteurUtilise();
 		
 		//ajout des capteurs dans la liste
-		for (Capteur capteur : capteurUtilise)
+		for (@SuppressWarnings("unused") Capteur capteur : capteurUtilise)
 		{
 			capteursValues.add(new CapteurValue());
 		}
@@ -107,10 +107,13 @@ public class RTMainThread extends Thread
 					_log.threaded_write("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
 					_log.affiche_log("Aucune données capteur : "+ capteurUtilise.get(i).getName() );
 				}
-				capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
-				capteursValues.get(i).setTimestampCaptureApi(dateCap);
-				capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
-				capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
+				else if (capteurUtilise.get(i).getLastSensorEvent() != null)
+				{
+					capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
+					capteursValues.get(i).setTimestampCaptureApi(dateCap);
+					capteursValues.get(i).setValues(capteurUtilise.get(i).getLastSensorEvent().values);
+					capteursValues.get(i).setType(capteurUtilise.get(i).getSensor().getType());
+				}
 			}
 			
 			if(Tools.isLogActived())//log
@@ -170,12 +173,16 @@ public class RTMainThread extends Thread
 	// Simulation du code API, retourne le temps necessaire (WCET-API)
 	public long voidRun(long maxCapteurwait)
 	{
+		//des membres ne sont pas utilisé parce que c'est pour du faux !
 		// initialisation des variable necessaire à la fonction
+		@SuppressWarnings("unused")
 		long debutExeUtil = 0; // stock le temps du début de l'execution (en nano)
+		@SuppressWarnings("unused")
 		long finExeUtil = 0; // stock le temps de la fin de l'execution (en nano)
 		long dateCap = 0; // stock le temps de recuperation des capteurs (en nano)
 		long lastPeriode = 0; // temps entre les deux dernier execution (en nano)
 		long debutPeriode = 0; // debut de la nouvelle periode (en nano)
+		@SuppressWarnings("unused")
 		long tempsCompensation = 0; // variable pour contenir le temps de sleep necessaire (en nano)
 		// initialisation variable pour le calcul du temps d'exectution
 		long endTimeExe = 0;
@@ -229,7 +236,7 @@ public class RTMainThread extends Thread
 					_log.threaded_write("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
 					_log.affiche_log("/INIT/Aucune données capteur : " + capteurUtilise.get(i).getName());
 				}
-				else
+				else if (capteurUtilise.get(i).getLastSensorEvent() != null)
 				{
 					capteursValues.get(i).setTimestampCaptureAnd(capteurUtilise.get(i).getLastSensorEvent().timestamp);
 					capteursValues.get(i).setTimestampCaptureApi(dateCap);
