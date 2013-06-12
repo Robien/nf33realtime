@@ -48,11 +48,8 @@ public class CapteurManager implements SensorEventListener
 		delaisCapteursMax = new ArrayList<Long>();
 		delaisCapteurs = new ArrayList<ArrayList<Long>>();
 
-		Log.d("CapteurManager", "onCreat - demande de sensor manager");
 		sensorManager = getSensorManager();
-		Log.d("CapteurManager", "onCreat sensor manager ok");
 		List<Sensor> listCapteurs = sensorManager.getSensorList(Sensor.TYPE_ALL);
-		Log.d("CapteurManager", "onCreat liste recuperé : " + listCapteurs.size());
 
 		capteurs = new ArrayList<Capteur>();
 		listeCapteursTexte = "liste des capteurs : \n";
@@ -64,7 +61,6 @@ public class CapteurManager implements SensorEventListener
 			capteurs.add(capteurTmp);
 			capteurTmp.setName(sensor.getName());
 			listeCapteursTexte += sensor.getName() + "\n";
-			Log.d("CAPTEURS", sensor.getType() +  "");
 			delaisCapteurs.add(new ArrayList<Long>());
 			if (getFromSauv && fichier.read().equals(sensor.getName()))
 			{
@@ -83,7 +79,6 @@ public class CapteurManager implements SensorEventListener
 			fichier.closeReader();
 		}
 
-		Log.d("CapteurManager", "onCreat liste write ok");
 
 		capteurCourant = capteurs.get(idCapteurCourant);
 		if (!capteurCourant.isUsed())
@@ -152,8 +147,11 @@ public class CapteurManager implements SensorEventListener
 			// activity.newMax(delaisCapteursMax.get(idCapteurCourant));
 		}
 		setIdCapteurCourant(0);
-		//TODO : et si 0 n'est pas utilisé ?
 		start();
+		if (!capteurCourant.isUsed())
+		{
+			nextCapteur();
+		}
 	}
 	public void startCaptureCapteur()
 	{
@@ -274,19 +272,14 @@ public class CapteurManager implements SensorEventListener
 	
 	public ArrayList<Capteur> getListeCapteurUtilise()
 	{
-		Log.d("DADU", "1.1");
 		ArrayList<Capteur> listCapteurs = new ArrayList<Capteur>();
-		Log.d("DADU", "1.2");
 		for (Capteur capteur : capteurs)
 		{
-			Log.d("DADU", "1.3");
 			if (capteur.isUsed())
 			{
-				Log.d("DADU", "1.4");
 				listCapteurs.add(capteur);
 			}
 		}
-		Log.d("DADU", "1.5");
 		return listCapteurs;
 	}
 	
