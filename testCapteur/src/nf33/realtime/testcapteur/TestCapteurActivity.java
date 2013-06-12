@@ -126,8 +126,9 @@ public class TestCapteurActivity extends Activity
         texteInfoBas = (TextView)findViewById(R.id.infocomplementaire);
         
         //zone de chargement
-        _chargement = new ProgressDialog(this, ProgressDialog.STYLE_HORIZONTAL);
+        _chargement = new ProgressDialog(this);
         //changement du style 
+        _chargement.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         _chargement.setTitle("Configuration");
         _chargement.setMax(100);
         
@@ -145,13 +146,18 @@ public class TestCapteurActivity extends Activity
     protected void onResume()
     {
         super.onResume();
-        Log.d("DADU", "onREsume begin");
     }
 
     @Override
     protected void onPause()
     {
         super.onPause();
+        if (isStarted)
+        {
+            isStarted = _rtdroid.stop();
+            texteprecision.setText("");
+            allowConfiguration();
+        }
     }
 
 

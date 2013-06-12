@@ -12,6 +12,7 @@ import android.util.Log;
 
 /**
  * @author Seg_fault_
+ * API determinisme android
  * 
  */
 public final class RTDroid
@@ -20,7 +21,6 @@ public final class RTDroid
 	private Activity activity;
 	private CapteurManager capteurManager;
 	
-	@SuppressWarnings("unused")
 	private RTRunnable runnable; // a changer par un tableau pour pouvoir appeller
 								// plusieurs méthodes
 	//private ArrayList<Capteur> capteursUtilise; // a changer pour un tableau de

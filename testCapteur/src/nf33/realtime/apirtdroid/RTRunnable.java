@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 /**
  * @author Seg_fault_
- *
+ * Classe interface d'application utilisateur
+ * 
  */
 public interface RTRunnable
 {

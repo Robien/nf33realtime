@@ -12,7 +12,6 @@ import nf33.realtime.apirtdroid.Tools;
 public class RTMainThread extends Thread
 {
 
-	
 	//durée maximal de recuperation des capteurs (en nano)
 	private long _maxDurationCap;
 	//durée maximal d'execution de la fonction utilisateur  (en nano)
