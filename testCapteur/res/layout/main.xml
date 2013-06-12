@@ -49,15 +49,15 @@
         android:textSize="16sp" />
     
     <TextView
-        android:id="@+id/info"
+        android:id="@+id/infoprecision"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.13"
         android:gravity="center"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/infocapteurs"
+        android:id="@+id/infogeneral"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.50"
@@ -65,7 +65,7 @@
         android:textSize="40sp" />
 
     <TextView
-        android:id="@+id/infogeneral"
+        android:id="@+id/infocomplementaire"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.10"
