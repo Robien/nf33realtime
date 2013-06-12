@@ -20,8 +20,8 @@ public final class Tools
 	public static final int WAIT_ACTIVE = 2;
 	public static int type_wait = WAIT_NANO;
 
-	public static final int nbIterationWCETUtilisateur = 500;
-	public static final int nbIterationWCETAPI = 100;
+	public static final int nbIterationWCETUtilisateur = 1000;
+	public static final int nbIterationWCETAPI = 20;
 	
 	// endore le thead pendant x nanoseconde
 	static public void nanoWait(long nanos) throws InterruptedException

@@ -83,12 +83,12 @@ public class CapteurValue
 	
 	public void setRandomValues()
 	{
-		Log.d("DADU", "rand !");
-//		for (int i = 0; i < _values.length;i++)
-//		{
-//			Log.d("DADU", "rand2");
-//			_values[i] = (float) (Math.random()*(-Float.MIN_VALUE + Float.MAX_VALUE) - Float.MIN_VALUE);
-//		}
+		
+		_values = new float[3]; 
+		for (int i = 0; i < _values.length;i++)
+		{
+			_values[i] = (float) (Math.random()*(-Float.MIN_VALUE + Float.MAX_VALUE) - Float.MIN_VALUE);
+		}
 	}
 	
 }
