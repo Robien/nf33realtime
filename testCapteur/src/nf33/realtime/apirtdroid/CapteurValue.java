@@ -1,5 +1,7 @@
 package nf33.realtime.apirtdroid;
 
+import android.hardware.SensorEvent;
+
 
 public class CapteurValue
 {
@@ -62,6 +64,28 @@ public class CapteurValue
 		this._type = type;
 	}
 	
+	public void setWithEvent(SensorEvent event)
+	{
+		_values = event.values;
+		_timestampCaptureAnd = event.timestamp;
+	}
 	
+	public int getId()
+	{
+		return _id;
+	}
+	
+	public void setId(int id)
+	{
+		_id = id;
+	}
+	
+	public void setRandomValues()
+	{
+		for (int i = 0; i < _values.length;i++)
+		{
+			_values[i] = (float) (Math.random()*(-Float.MIN_VALUE + Float.MAX_VALUE) - Float.MIN_VALUE);
+		}
+	}
 	
 }

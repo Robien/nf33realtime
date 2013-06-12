@@ -6,8 +6,6 @@ package nf33.realtime.apirtdroid;
 import java.util.ArrayList;
 import java.util.List;
 
-import nf33.realtime.testcapteur.TestCapteurActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -15,7 +13,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.view.ViewDebug.CapturedViewProperty;
 
 /**
  * @author Romain

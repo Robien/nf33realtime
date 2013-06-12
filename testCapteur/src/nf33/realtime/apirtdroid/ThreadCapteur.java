@@ -1,5 +1,8 @@
 package nf33.realtime.apirtdroid;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import android.util.Log;
 
 public class ThreadCapteur extends Thread
@@ -48,11 +51,21 @@ public class ThreadCapteur extends Thread
 		Long maxCapteurWait = capteurManager.getPeriodeMax();
 		
 		Log.d("DADU", "Début du calcul du WCET");
+		ArrayList<Capteur> listeCapteurUtilise = capteurManager.getListeCapteurUtilise();
+		ArrayList<CapteurValue> listeCapteurValue = new ArrayList<CapteurValue>();
+		for (int i = 0; i < listeCapteurUtilise.size();++i)
+		{
+			listeCapteurValue.add(listeCapteurUtilise.get(i).getCapteurValue());
+		}
 		Long total = 0l;
 		for (int i = 0; i < 10; ++i)
 		{
+			for (int j = 0; j < listeCapteurUtilise.size(); j++)
+			{
+				listeCapteurUtilise.get(j).setRandomValues();
+			}
 			Long debut =  System.nanoTime();
-			programmeUtilisateur.periodicEvent(0, null);
+			programmeUtilisateur.periodicEvent(periodeDemande, listeCapteurValue);
 			Long tmp = System.nanoTime() - debut;
 			if (total < tmp)
 			{

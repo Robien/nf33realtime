@@ -5,7 +5,6 @@ package nf33.realtime.apirtdroid;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.util.Log;
 
 /**
  * @author Seg_fault_
@@ -20,24 +19,27 @@ public class Capteur
 	private Long maxPeriod;
 	private String name;
 	private SensorEvent lastSensorEvent;
+	private CapteurValue capteurValue;
 
 	public Capteur(int id, Sensor sensor, Boolean isUsed)
 	{
-		setId(id);
-		setSensor(sensor);
-		setIsUsed(isUsed);
-		maxPeriod = 0l;
-		name = new String("");
-		lastSensorEvent = null;
+		init(id, sensor, isUsed);
 	}
 	public Capteur(int id, Sensor sensor)
 	{
+		init(id, sensor, false);
+	}
+	
+	private void init(int id, Sensor sensor, Boolean isUsed)
+	{
+		
+		setIsUsed(isUsed);
 		setId(id);
 		setSensor(sensor);
-		setIsUsed(false);
 		maxPeriod = 0l;
 		name = new String("");
 		lastSensorEvent = null;
+		capteurValue = new CapteurValue();
 	}
 
 	public void setId(int id)
@@ -97,6 +99,16 @@ public class Capteur
 
 	public void setLastSensorEvent(SensorEvent lastSensorEvent)
 	{
+		capteurValue.setWithEvent(lastSensorEvent);
 		this.lastSensorEvent = lastSensorEvent;
+	}
+	
+	public CapteurValue getCapteurValue()
+	{
+		return capteurValue;
+	}
+	public void setRandomValues()
+	{
+		capteurValue.setRandomValues();
 	}
 }

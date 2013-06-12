@@ -3,14 +3,11 @@
  */
 package nf33.realtime.apirtdroid;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
-import android.content.MutableContextWrapper;
 import android.util.Log;
-import android.widget.Toast;
 
 
 /**
@@ -23,6 +20,7 @@ public final class RTDroid
 	private Activity activity;
 	private CapteurManager capteurManager;
 	
+	@SuppressWarnings("unused")
 	private RTRunnable runnable; // a changer par un tableau pour pouvoir appeller
 								// plusieurs méthodes
 	//private ArrayList<Capteur> capteursUtilise; // a changer pour un tableau de
@@ -34,7 +32,8 @@ public final class RTDroid
 	private RTMainThread _threadPrincipal; //Thread de gestion de l'execution
 
 	private Long periode;
-	private  Long wcetAPI;
+	@SuppressWarnings("unused")
+	private Long wcetAPI;
 	private Long wcetUtilisateur;
 	private Long maxCapteur;
 	
