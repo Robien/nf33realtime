@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">RTDroid</string>
-    <string name="hello">Hello World, TestCapteurActivity!</string>
+    <string name="hello">Hello World, Testcapteur RTDroid!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 	<string name="titre">Application utilisateur (API RTDroid)</string>
