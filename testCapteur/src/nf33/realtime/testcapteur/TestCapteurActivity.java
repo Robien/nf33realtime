@@ -197,7 +197,6 @@ public class TestCapteurActivity extends Activity
 	        {
 	            isStarted = _rtdroid.launch();
 	            texteprecision.setText("");
-	            
 	            _boutonConfig.setEnabled(false);
 	        }
 	       
@@ -223,6 +222,7 @@ public class TestCapteurActivity extends Activity
          _boutonConfig.setEnabled(true);
          _boutonExe.setEnabled(false);
          configure = false;
+         _boutonExe.setText(R.string.boutonStart);
     }
     
     public void selectionCapteur(long freqDemande)
