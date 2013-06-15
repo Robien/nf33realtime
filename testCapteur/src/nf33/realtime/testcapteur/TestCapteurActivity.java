@@ -216,7 +216,7 @@ public class TestCapteurActivity extends Activity
     
     public void allowConfiguration()
     {
-    	 texteprecision.setText("Entrez une période en milliseconde puis configuez");
+    	 texteprecision.setText("Entrez une période en milliseconde puis configurez");
     	 texteInfoCentre.setText("");
     	 texteInfoBas.setText("");
          _boutonConfig.setEnabled(true);
