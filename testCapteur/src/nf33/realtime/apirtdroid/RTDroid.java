@@ -46,7 +46,7 @@ public final class RTDroid
 		configurationEnCours = 0;
 		//configuration generale
 		Tools.setTypeWait(Tools.WAIT_ACTIVE); //choix de l'attente
-		Tools.setLogActived(true); //activer les logs
+		Tools.setLogActived(false); //activer les logs
 		Tools.setPendingCompensation(true); //activer l'attente de compensation
 	}
 	
